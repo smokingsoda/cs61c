@@ -30,8 +30,10 @@ void set_bit(unsigned * x,
 void flip_bit(unsigned * x,
               unsigned n) {
     // YOUR CODE HERE
-	unsigned tem = 1;
-	tem = tem << n;
-	*x = *x ^ tem;
+	// unsigned tem = 1;
+	// tem = tem << n;
+	// *x = *x ^ tem;
+	unsigned helper = 1 << n;
+	*x = *x ^ helper;
 }
 
