@@ -77,7 +77,32 @@ main:
 # Think: why might having a1 be useful?
 f:
     # YOUR CODE GOES HERE!
+    addi sp, sp, -20
+    sw s0, 0(sp) # value want to evaluate
+    sw s1, 4(sp) # address of output array
+    sw s2, 8(sp) # corresponding return value
+    sw s3, 12(sp)
+    sw ra, 16(sp)
+    
+    mv s0, a0
+    mv s1, a1
+    mv t0, s0
+    addi t0, t0, 3
+    slli t0, t0, 2
+    add s3, s1, t0
+    mv s1, a1
+    lw s2, 0(s3)
+    
+    mv a0, s2
+    
 
+    lw s0, 0(sp) # value want to evaluate
+    lw s1, 4(sp) # address of output array
+    lw s2, 8(sp) # corresponding return value
+    lw s3, 12(sp)
+    lw ra, 16(sp)
+    addi sp, sp, 20
+    
     jr ra               # Always remember to jr ra after your function!
 
 print_int:
