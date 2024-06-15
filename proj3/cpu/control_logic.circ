@@ -512,6 +512,11 @@ end TCL_Generic;
       <a name="facing" val="north"/>
       <a name="label" val="BrLt"/>
     </comp>
+    <comp lib="0" loc="(2560,2060)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="imm_S"/>
+      <a name="width" val="32"/>
+    </comp>
     <comp lib="0" loc="(2570,1410)" name="Tunnel">
       <a name="facing" val="south"/>
       <a name="label" val="ALUSel0_I_N"/>
@@ -664,7 +669,7 @@ end TCL_Generic;
     <comp lib="0" loc="(390,660)" name="Tunnel">
       <a name="label" val="R_Type"/>
     </comp>
-    <comp lib="0" loc="(390,720)" name="Tunnel">
+    <comp lib="0" loc="(390,780)" name="Tunnel">
       <a name="label" val="SB_Type"/>
     </comp>
     <comp lib="0" loc="(4000,460)" name="Tunnel">
@@ -895,7 +900,7 @@ end TCL_Generic;
       <a name="width" val="4"/>
     </comp>
     <comp lib="0" loc="(80,990)" name="Constant">
-      <a name="value" val="0x26283b3"/>
+      <a name="value" val="0xfe62cce3"/>
       <a name="width" val="32"/>
     </comp>
     <comp lib="0" loc="(810,210)" name="Pin">
@@ -1150,7 +1155,6 @@ end TCL_Generic;
     <wire from="(1050,860)" to="(1050,930)"/>
     <wire from="(1180,2320)" to="(1180,2330)"/>
     <wire from="(1180,2330)" to="(1480,2330)"/>
-    <wire from="(120,990)" to="(120,1050)"/>
     <wire from="(1200,2210)" to="(1200,2220)"/>
     <wire from="(1200,2220)" to="(1300,2220)"/>
     <wire from="(1200,2250)" to="(1200,2270)"/>
@@ -1274,6 +1278,7 @@ end TCL_Generic;
     <wire from="(2440,660)" to="(2650,660)"/>
     <wire from="(2450,570)" to="(2450,810)"/>
     <wire from="(2450,810)" to="(2650,810)"/>
+    <wire from="(250,200)" to="(250,210)"/>
     <wire from="(250,210)" to="(250,230)"/>
     <wire from="(2550,1480)" to="(2550,1640)"/>
     <wire from="(2550,1640)" to="(2690,1640)"/>
@@ -1357,7 +1362,7 @@ end TCL_Generic;
     <wire from="(350,580)" to="(390,580)"/>
     <wire from="(350,610)" to="(390,610)"/>
     <wire from="(350,660)" to="(390,660)"/>
-    <wire from="(350,720)" to="(390,720)"/>
+    <wire from="(350,780)" to="(390,780)"/>
     <wire from="(370,1320)" to="(440,1320)"/>
     <wire from="(370,1330)" to="(430,1330)"/>
     <wire from="(370,1340)" to="(420,1340)"/>
