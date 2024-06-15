@@ -899,10 +899,6 @@ end TCL_Generic;
       <a name="label" val="ALUSel"/>
       <a name="width" val="4"/>
     </comp>
-    <comp lib="0" loc="(80,990)" name="Constant">
-      <a name="value" val="0xfe62cce3"/>
-      <a name="width" val="32"/>
-    </comp>
     <comp lib="0" loc="(810,210)" name="Pin">
       <a name="facing" val="south"/>
       <a name="label" val="MemRW"/>
@@ -1541,7 +1537,6 @@ end TCL_Generic;
     <wire from="(700,2390)" to="(1220,2390)"/>
     <wire from="(730,210)" to="(730,230)"/>
     <wire from="(750,230)" to="(790,230)"/>
-    <wire from="(80,990)" to="(120,990)"/>
     <wire from="(810,210)" to="(810,230)"/>
     <wire from="(830,230)" to="(860,230)"/>
     <wire from="(880,1000)" to="(880,1050)"/>
