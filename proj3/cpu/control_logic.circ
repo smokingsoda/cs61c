@@ -603,7 +603,7 @@ end TCL_Generic;
     </comp>
     <comp lib="0" loc="(300,2570)" name="Tunnel">
       <a name="facing" val="east"/>
-      <a name="label" val="S_Type"/>
+      <a name="label" val="SB_Type"/>
     </comp>
     <comp lib="0" loc="(3090,470)" name="Tunnel">
       <a name="facing" val="south"/>
@@ -1278,7 +1278,6 @@ end TCL_Generic;
     <wire from="(2440,660)" to="(2650,660)"/>
     <wire from="(2450,570)" to="(2450,810)"/>
     <wire from="(2450,810)" to="(2650,810)"/>
-    <wire from="(250,200)" to="(250,210)"/>
     <wire from="(250,210)" to="(250,230)"/>
     <wire from="(2550,1480)" to="(2550,1640)"/>
     <wire from="(2550,1640)" to="(2690,1640)"/>
