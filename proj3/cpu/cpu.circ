@@ -257,6 +257,10 @@ end TCL_Generic;
       <a name="value" val="0x4"/>
       <a name="width" val="32"/>
     </comp>
+    <comp lib="0" loc="(1210,410)" name="Constant">
+      <a name="value" val="0x4"/>
+      <a name="width" val="32"/>
+    </comp>
     <comp lib="0" loc="(1230,190)" name="Pin">
       <a name="facing" val="south"/>
       <a name="label" val="t2"/>
@@ -507,6 +511,9 @@ end TCL_Generic;
       <a name="enable" val="false"/>
       <a name="width" val="32"/>
     </comp>
+    <comp lib="3" loc="(1310,420)" name="Adder">
+      <a name="width" val="32"/>
+    </comp>
     <comp lib="3" loc="(190,460)" name="Adder">
       <a name="width" val="32"/>
     </comp>
@@ -572,11 +579,15 @@ end TCL_Generic;
     <wire from="(1140,190)" to="(1140,220)"/>
     <wire from="(1160,210)" to="(1210,210)"/>
     <wire from="(1160,590)" to="(1160,610)"/>
-    <wire from="(1180,500)" to="(1260,500)"/>
+    <wire from="(1180,500)" to="(1220,500)"/>
     <wire from="(120,430)" to="(120,450)"/>
     <wire from="(120,430)" to="(320,430)"/>
     <wire from="(120,450)" to="(150,450)"/>
     <wire from="(120,470)" to="(150,470)"/>
+    <wire from="(1210,410)" to="(1270,410)"/>
+    <wire from="(1220,430)" to="(1220,500)"/>
+    <wire from="(1220,430)" to="(1270,430)"/>
+    <wire from="(1220,500)" to="(1260,500)"/>
     <wire from="(1230,190)" to="(1230,220)"/>
     <wire from="(1230,750)" to="(1250,750)"/>
     <wire from="(1230,770)" to="(1240,770)"/>
@@ -590,6 +601,7 @@ end TCL_Generic;
     <wire from="(1270,510)" to="(1270,980)"/>
     <wire from="(1290,490)" to="(1340,490)"/>
     <wire from="(1300,630)" to="(1300,1000)"/>
+    <wire from="(1310,420)" to="(1480,420)"/>
     <wire from="(1320,190)" to="(1320,220)"/>
     <wire from="(1320,610)" to="(1340,610)"/>
     <wire from="(1340,210)" to="(1390,210)"/>
@@ -600,6 +612,8 @@ end TCL_Generic;
     <wire from="(1430,210)" to="(1480,210)"/>
     <wire from="(1450,380)" to="(1450,550)"/>
     <wire from="(1450,550)" to="(1500,550)"/>
+    <wire from="(1480,420)" to="(1480,560)"/>
+    <wire from="(1480,560)" to="(1540,560)"/>
     <wire from="(150,570)" to="(180,570)"/>
     <wire from="(1500,190)" to="(1500,220)"/>
     <wire from="(1500,470)" to="(1500,550)"/>

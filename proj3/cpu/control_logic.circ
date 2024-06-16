@@ -785,6 +785,10 @@ end TCL_Generic;
     <comp lib="0" loc="(440,1680)" name="Tunnel">
       <a name="label" val="bgeu"/>
     </comp>
+    <comp lib="0" loc="(4480,1020)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="label" val="UJ_Type"/>
+    </comp>
     <comp lib="0" loc="(4480,700)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="label" val="blt"/>
@@ -1097,7 +1101,7 @@ end TCL_Generic;
     </comp>
     <comp lib="1" loc="(4650,480)" name="OR Gate">
       <a name="facing" val="north"/>
-      <a name="inputs" val="6"/>
+      <a name="inputs" val="7"/>
       <a name="size" val="70"/>
     </comp>
     <comp lib="1" loc="(4650,640)" name="AND Gate">
@@ -1529,6 +1533,7 @@ end TCL_Generic;
     <wire from="(430,1540)" to="(430,1560)"/>
     <wire from="(430,1560)" to="(440,1560)"/>
     <wire from="(440,230)" to="(480,230)"/>
+    <wire from="(4480,1020)" to="(4620,1020)"/>
     <wire from="(4480,700)" to="(4640,700)"/>
     <wire from="(4480,740)" to="(4780,740)"/>
     <wire from="(4480,780)" to="(4710,780)"/>
@@ -1549,9 +1554,12 @@ end TCL_Generic;
     <wire from="(4580,630)" to="(4630,630)"/>
     <wire from="(4590,680)" to="(4590,940)"/>
     <wire from="(4590,940)" to="(5010,940)"/>
+    <wire from="(4620,1020)" to="(5010,1020)"/>
     <wire from="(4620,550)" to="(4620,620)"/>
+    <wire from="(4620,640)" to="(4620,1020)"/>
+    <wire from="(4620,640)" to="(4640,640)"/>
     <wire from="(4630,550)" to="(4630,630)"/>
-    <wire from="(4640,550)" to="(4650,550)"/>
+    <wire from="(4640,550)" to="(4640,640)"/>
     <wire from="(4640,670)" to="(4640,700)"/>
     <wire from="(4640,700)" to="(5010,700)"/>
     <wire from="(4650,460)" to="(4650,480)"/>
@@ -1578,7 +1586,7 @@ end TCL_Generic;
     <wire from="(4850,820)" to="(4980,820)"/>
     <wire from="(4860,620)" to="(4860,640)"/>
     <wire from="(4870,680)" to="(4870,980)"/>
-    <wire from="(4870,980)" to="(5020,980)"/>
+    <wire from="(4870,980)" to="(5010,980)"/>
     <wire from="(490,1090)" to="(550,1090)"/>
     <wire from="(490,840)" to="(520,840)"/>
     <wire from="(4940,550)" to="(4940,740)"/>

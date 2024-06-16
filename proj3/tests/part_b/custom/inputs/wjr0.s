@@ -1,7 +1,5 @@
-addi s0 s0 1
-addi s1 x0 14
-sll s0 s0 s1
-add s1 s0 x0
-add t0 s1 s0
-lui ra 0xfffff 
-auipc ra 0xffaa1
+jal ra label
+addi s0 x0 -1
+jal x0 end
+label: jal x0 -8
+end: addi a0 x0 -1
