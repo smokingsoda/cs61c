@@ -1,24 +1,25 @@
 Scenario 1
-    1.
-    2.
-    3.
+    1.cache size, step size * sizeof(int)
+    2.0
+    3.step size, 1
 
 Scenario 2
-    1.
-    2.
-    3.
+    1.64
+    2.MHHH
+    3.1.0
 
 Scenario 3
-    1.
-    2.
-    3.
-    4.
-    5.
+    1.0.5, 0.0, 0.5 (where overall hit rate = H1 + M1 * H2, H1 is L1 hit rate, M1 is L1 miss rate, H2 is L2 hit rate)
+    2.32, 16
+    3.16
+    4.rep count
+    5.=, =, +, = (if rep count > 1, then +, = (L2 only accesses once to the memory), +, = (L2 only accesses once to the memory))
 
 --- lines below are ignored by the AG ---
 
-Checkoff Question 1:
-Checkoff Question 2:
-Checkoff Question 3:
-Checkoff Question 4:
-Checkoff Question 5:
+Checkoff Question 1:because it will always trigger misses dueto the cache block size and the step size, which means the instructions always accesses the same block that map to the block with the same tag.
+Checkoff Question 2:step size and block size
+Checkoff Question 3:spatial locality, read access and write access, thus 3/4 is 0.75.
+Checkoff Question 4:Because no data in the cache would be evicted.
+Checkoff Question 5:SO, instead, we should try to access an element of the array at a time and apply all of the fuctions to that element so we can be completely done with it before moving on, thereby keeping that element hot in the cache and not having to circle back to it later on!
+Checkoff Question 6:As L2 accesses to the memory has carried the full array, the more rep count will cause more hits rather than misses when L1 accesses to L2.

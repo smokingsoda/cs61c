@@ -1,14 +1,15 @@
-addi t0, x0, 10
-addi t1, x0, 20
-addi t2, x0, 30
-addi sp, sp, -12
-sw t0, 0(sp)
-sw t1, 4(sp)
-sw t2, 8(sp)
-add t0, x0, x0
-add t1, x0, x0
-add t2, x0, x0
-lw t0, 0(sp)
-lw t1, 4(sp)
-lw t2, 8(sp)
-addi sp, sp, 12
+main:
+    add t0, x0, x0
+    addi t1, x0, 1
+    li t3, 6
+fib:
+    beq t3, x0, finish
+    add t2, t1, t0
+    mv t0, t1
+    mv t1, t2
+    addi t3, t3, -1
+    j fib
+finish:
+    addi a0, x0, 1
+    addi a1, t0, 0
+    addi a0, x0, 10

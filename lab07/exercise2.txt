@@ -1,8 +1,8 @@
-1.
-2.
+1.jki, kji
+2.ijk
 
 --- lines below are ignored by the AG ---
 
-Checkoff Question 1:
-Checkoff Question 2:
-Checkoff Question 3:
+Checkoff Question 1:As each the innermost loop increments, both jki and kji can hit(due to the spatial locality and temporal locality). In other words, these algorithms can keep cache hot.
+Checkoff Question 2:A can not be accessed by a reasonable stride.
+Checkoff Question 3:According to the function or arithmetic expression, we shoule choose the most indepent parameters as the innermost loop number that would be incremented.
