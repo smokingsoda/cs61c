@@ -1,19 +1,19 @@
 Exercise 1:
-    1.
-    2.
-    3.
+    1.32
+    2.5, 5, 0, 5
+    3.no, no(because if there is a TLB miss, then the process will access the page table. However, the TLB size equals to the number of Pysical Memory Frame, which means all Pysical Memory Frames are allocated in the TLB, and there is no way to find another frame is allocated but not in the TLB.)
 
 Exercise 2:
-    1.
+    1.00, 20, 40, 60, 80, a0, c0, e0, 00, 20
 
 Exercise 3:
-    1.
+    1.Pysical Memory Size
 
 --- lines below are ignored by the AG ---
 
 Exercise 1 Checkoff Questions:
-    1.
-    2.
+    1.Split the VM bits into the upper 3 as VPN and the lower 5 as offset. Search in TLB if there is an existing PPN - VPN. If not, Look up in the page table. If not, allocate the very first of unallocated Physical Memory Frame as the corresponding PPN.
+    2.Because the acutal Physical Memory Space is only 4 * page frame size(32 words).
 
 Exercise 4 Checkoff Question:
-    1.
+    1.p1-p4 are different processes. The percentage is higher, because the TLB is zeroed out when the OS has context switches. Each process fills out the TLB for (around) 4 memory accesses, but right after that, a context switch happens and the next process begins with a zeroed out TLB.
