@@ -97,13 +97,13 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
         return -1;
     }
     *mat = (matrix *) malloc(sizeof(matrix));
-    if (rows == 0 || cols == 0) {
+    if (rows == 1 || cols == 1) {
         (*mat)->is_1d = -1;
     } else {
         (*mat)->is_1d = 0;
     }
-    (*mat)->rows = rows + 1;
-    (*mat)->cols = cols + 1;
+    (*mat)->rows = rows;
+    (*mat)->cols = cols;
     (*mat)->data = (double **) malloc(sizeof(double *) * (*mat)->rows);
     (*mat)->data = from->data + row_offset;
     from->ref_cnt += 1;
@@ -121,10 +121,14 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
  */
 void deallocate_matrix(matrix *mat) {
     /* TODO: YOUR CODE HERE */
+    if (mat == NULL) {
+        return;
+    }
     if (mat->ref_cnt == 1) {
         for (int i = 0; i < mat->rows; ++i) {
             free(*(mat->data + i));
         }
+        free(mat->data);
     }
     free(mat);
 }
@@ -187,7 +191,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     for (int i = 0; i < result->rows; ++i) {
         for (int j = 0; j < result->cols; ++j) {
-            *(*(result->data + i) + j) = *(*(mat2->data + i) + j) - *(*(mat1->data + i) + j);
+            *(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
         }
     }
     return 0;
@@ -200,14 +204,14 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
-    if (mat1->rows != mat2->cols || mat1->cols != mat2->rows || result->rows != mat1->rows || result->cols != mat2->cols) {
+    if (mat1->cols != mat2->rows || result->rows != mat1->rows || result->cols != mat2->cols) {
         return -1;
     }
     for (int i = 0; i < mat1->rows; ++i) {
         for (int j = 0; j < mat2->cols; ++j) {
             *(*(result->data + i) + j) = 0;
             for (int k = 0; k < mat1->cols; ++k) {
-                *(*(result->data + i) + j) = (*(*(result->data + i) + j) + (*(*(mat1->data + i) + k)) * (*(*(mat2->data + j) + k)));
+                (*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
         }
     }
@@ -221,14 +225,39 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
-    if (mat->rows != mat->cols) {
-        return -1;
-    } else if (pow == 1) {
-        return 0;
-    } else {
-        mul_matrix(result, mat, mat);
-        return pow_matrix(result, mat, pow - 1);
+    matrix *mid1 = NULL;
+    matrix *mid2 = NULL;
+    allocate_matrix(&mid1, mat->rows, mat->rows);
+    allocate_matrix(&mid2, mat->rows, mat->rows);
+    for (int i = 1; i <= pow; ++i) {
+        if (i == 1) {
+            for (int m = 0; m < mat->rows; ++m) {
+                for (int n = 0; n < mat->cols; ++n) {
+                    mid1->data[m][n] = mat->data[m][n];
+                }
+            }
+        } else if (i % 2 == 1) {
+            mul_matrix(mid1, mid2, mat);
+        } else if (i % 2 == 0) {
+            mul_matrix(mid2, mid1, mat);
+        }
     }
+    if (pow % 2 == 1) {
+        for (int m = 0; m < mid1->rows; ++m) {
+            for (int n = 0; n < mid1->cols; ++n) {
+                result->data[m][n] = mid1->data[m][n];
+            }
+        }
+    } else {
+        for (int m = 0; m < mid2->rows; ++m) {
+            for (int n = 0; n < mid2->cols; ++n) {
+                result->data[m][n] = mid2->data[m][n];
+            }
+        }
+    }
+    deallocate_matrix(mid1);
+    deallocate_matrix(mid2);
+    return 0;
 }
 
 /*
