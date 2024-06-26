@@ -1,4 +1,4 @@
-#include <Python.h>
+#include "Python.h"
 
 typedef struct matrix {
     int rows;      	// number of rows

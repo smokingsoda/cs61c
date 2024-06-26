@@ -1,8 +1,8 @@
-CC = gcc
-CFLAGS = -g -Wall -std=c99 -fopenmp -mavx -mfma -pthread
+CC = gcc-14
+CFLAGS = -g -Wall -std=c99 -fopenmp -pthread
 LDFLAGS = -fopenmp
-CUNIT = -L/home/ff/cs61c/cunit/install/lib -I/home/ff/cs61c/cunit/install/include -lcunit
-PYTHON = -I/usr/include/python3.6 -lpython3.6m
+CUNIT = -L/opt/homebrew/opt/cunit/lib -I/opt/homebrew/opt/cunit/include -lcunit
+PYTHON = -L/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/lib/ -lpython3.12
 
 install:
 	if [ ! -f files.txt ]; then touch files.txt; fi
