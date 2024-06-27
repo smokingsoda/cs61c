@@ -13,16 +13,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd34607d-188e-458e-8182-814eb967b5cf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/proj4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/proj4.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/c_cpp_properties.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mat_test.c" beforeDir="false" afterPath="$PROJECT_DIR$/mat_test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matrix.h" beforeDir="false" afterPath="$PROJECT_DIR$/matrix.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matrix.c" beforeDir="false" afterPath="$PROJECT_DIR$/matrix.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/numc.c" beforeDir="false" afterPath="$PROJECT_DIR$/numc.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +124,7 @@
       <option name="presentableId" value="Default" />
       <updated>1719472022177</updated>
       <workItem from="1719472023616" duration="3369000" />
-      <workItem from="1719480090701" duration="309000" />
+      <workItem from="1719480090701" duration="6602000" />
     </task>
     <servers />
   </component>

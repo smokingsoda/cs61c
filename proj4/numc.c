@@ -1,5 +1,5 @@
 #include "numc.h"
-#include <structmember.h>
+#include "/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/include/python3.12/structmember.h"
 
 PyTypeObject Matrix61cType;
 
@@ -287,6 +287,34 @@ PyObject *Matrix61c_repr(PyObject *self) {
  */
 PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
+    if (PyObject_TypeCheck(args, &Matrix61cType) == 0) {
+        PyErr_SetString(PyExc_TypeError, "Expected a Matrix61c object");
+        return NULL;
+    }
+    Matrix61c *other = (Matrix61c *) args;
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, self->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    rv->shape = PyTuple_New(2);
+    PyObject *item1 = PyLong_FromLong(self->mat->rows);
+    PyTuple_SetItem(rv->shape, 0, item1);
+    PyObject *item2 = PyLong_FromLong(self->mat->cols);
+    PyTuple_SetItem(rv->shape, 1, item2);
+    flag = add_matrix(rv->mat, self->mat, other->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    return (PyObject *) rv;
 }
 
 /*
@@ -295,6 +323,34 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
  */
 PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
+    if (PyObject_TypeCheck(args, &Matrix61cType) == 0) {
+        PyErr_SetString(PyExc_TypeError, "Expected a Matrix61c object");
+        return NULL;
+    }
+    Matrix61c *other = (Matrix61c *) args;
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, self->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    rv->shape = PyTuple_New(2);
+    PyObject *item1 = PyLong_FromLong(self->mat->rows);
+    PyTuple_SetItem(rv->shape, 0, item1);
+    PyObject *item2 = PyLong_FromLong(self->mat->cols);
+    PyTuple_SetItem(rv->shape, 1, item2);
+    flag = sub_matrix(rv->mat, self->mat, other->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    return (PyObject *) rv;
 }
 
 /*
@@ -303,6 +359,34 @@ PyObject *Matrix61c_sub(Matrix61c* self, PyObject* args) {
  */
 PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
     /* TODO: YOUR CODE HERE */
+    if (PyObject_TypeCheck(args, &Matrix61cType) == 0) {
+        PyErr_SetString(PyExc_TypeError, "Expected a Matrix61c object");
+        return NULL;
+    }
+    Matrix61c *other = (Matrix61c *) args;
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, other->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    rv->shape = PyTuple_New(2);
+    PyObject *item1 = PyLong_FromLong(self->mat->rows);
+    PyTuple_SetItem(rv->shape, 0, item1);
+    PyObject *item2 = PyLong_FromLong(self->mat->cols);
+    PyTuple_SetItem(rv->shape, 1, item2);
+    flag = mul_matrix(rv->mat, self->mat, other->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    return (PyObject *) rv;
 }
 
 /*
@@ -310,6 +394,29 @@ PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
  */
 PyObject *Matrix61c_neg(Matrix61c* self) {
     /* TODO: YOUR CODE HERE */
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, self->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    rv->shape = PyTuple_New(2);
+    PyObject *item1 = PyLong_FromLong(self->mat->rows);
+    PyTuple_SetItem(rv->shape, 0, item1);
+    PyObject *item2 = PyLong_FromLong(self->mat->cols);
+    PyTuple_SetItem(rv->shape, 1, item2);
+    flag = neg_matrix(rv->mat, self->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    return (PyObject *) rv;
 }
 
 /*
@@ -317,6 +424,29 @@ PyObject *Matrix61c_neg(Matrix61c* self) {
  */
 PyObject *Matrix61c_abs(Matrix61c *self) {
     /* TODO: YOUR CODE HERE */
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, self->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    rv->shape = PyTuple_New(2);
+    PyObject *item1 = PyLong_FromLong(self->mat->rows);
+    PyTuple_SetItem(rv->shape, 0, item1);
+    PyObject *item2 = PyLong_FromLong(self->mat->cols);
+    PyTuple_SetItem(rv->shape, 1, item2);
+    flag = abs_matrix(rv->mat, self->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    return (PyObject *) rv;
 }
 
 /*
@@ -324,6 +454,7 @@ PyObject *Matrix61c_abs(Matrix61c *self) {
  */
 PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional) {
     /* TODO: YOUR CODE HERE */
+    
 }
 
 /*

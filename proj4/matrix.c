@@ -63,7 +63,13 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -1;
     }
     *mat = (matrix *) malloc(sizeof(matrix)); //allocate memory for (*mat) pointer
+    if (*mat == NULL) {
+        return -2;
+    }
     (*mat)->data = (double **) malloc(sizeof(double *) * rows); //allocate memory for date double pointer
+    if ((*mat)->data == NULL) {
+        return -2;
+    }
     for (int i = 0; i < rows; ++i) {
         *((*mat)->data + i) = (double *) malloc(sizeof(double) * cols);
         for (int j = 0; j < cols; ++j) {
