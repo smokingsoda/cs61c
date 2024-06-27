@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        "basic.h": "c",
+        "cunit.h": "c",
+        "matrix.h": "c",
+        "omp.h": "c"
+    }
+}
