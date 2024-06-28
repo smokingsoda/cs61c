@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
 
 // Include SSE intrinsics
 #if defined(_MSC_VER)
@@ -111,6 +110,9 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     (*mat)->rows = rows;
     (*mat)->cols = cols;
     (*mat)->data = (double **) malloc(sizeof(double *) * (*mat)->rows);
+    if ((*mat)->data == NULL) {
+        return -2;
+    }
     (*mat)->data = from->data + row_offset;
     from->ref_cnt += 1;
     (*mat)->ref_cnt = from->ref_cnt;
@@ -231,10 +233,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     /* TODO: YOUR CODE HERE */
+    if (result->rows != mat->rows || result->cols != mat->cols || mat->rows != mat->cols) {
+        return -1;
+    }
     matrix *mid1 = NULL;
     matrix *mid2 = NULL;
-    allocate_matrix(&mid1, mat->rows, mat->rows);
-    allocate_matrix(&mid2, mat->rows, mat->rows);
+    int flag;
+    flag = allocate_matrix(&mid1, mat->rows, mat->rows);
+    if (flag != 0) {
+        return -2;
+    }
+    flag = allocate_matrix(&mid2, mat->rows, mat->rows);
+    if (flag != 0) {
+        return -2;
+    }
     for (int i = 1; i <= pow; ++i) {
         if (i == 1) {
             for (int m = 0; m < mat->rows; ++m) {
