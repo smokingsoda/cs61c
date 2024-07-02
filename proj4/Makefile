@@ -1,14 +1,14 @@
-CC = gcc-14
-CFLAGS = -g -Wall -std=c99 -fopenmp -pthread
+CC = gcc
+CFLAGS = -g -Wall -std=c99 -fopenmp -mavx -mfma -pthread
 LDFLAGS = -fopenmp
-CUNIT = -L/opt/homebrew/opt/cunit/lib -I/opt/homebrew/opt/cunit/include -lcunit
-PYTHON = -L/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/lib -I/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/include/python3.12/ -lpython3.12
+CUNIT = -lcunit
+PYTHON = -I/usr/include/python3.10 -lpython3.10
 
 install:
 	if [ ! -f files.txt ]; then touch files.txt; fi
 	rm -rf build
 	xargs rm -rf < files.txt
-	python3.6 setup.py install --record files.txt
+	python3 setup.py install --record files.txt
 
 uninstall:
 	if [ ! -f files.txt ]; then touch files.txt; fi
