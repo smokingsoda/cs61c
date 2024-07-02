@@ -311,7 +311,7 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     PyTuple_SetItem(rv->shape, 0, item1);
     PyObject *item2 = PyLong_FromLong(self->mat->cols);
     PyTuple_SetItem(rv->shape, 1, item2);
-    //flag = add_matrix(rv->mat, self->mat, other->mat);
+    flag = add_matrix(rv->mat, self->mat, other->mat);
     if (flag == -1) {
         PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
         return NULL;
