@@ -438,11 +438,7 @@ PyObject *Matrix61c_abs(Matrix61c *self) {
         return NULL;
     }
     rv->mat = new_mat;
-    rv->shape = PyTuple_New(2);
-    PyObject *item1 = PyLong_FromLong(self->mat->rows);
-    PyTuple_SetItem(rv->shape, 0, item1);
-    PyObject *item2 = PyLong_FromLong(self->mat->cols);
-    PyTuple_SetItem(rv->shape, 1, item2);
+    rv->shape = get_shape(new_mat->rows, new_mat->cols);
     flag = abs_matrix(rv->mat, self->mat);
     if (flag == -1) {
         PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
