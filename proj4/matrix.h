@@ -1,5 +1,5 @@
-#include "/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/include/python3.12/Python.h"
-//#include <Python.h>
+//#include "/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/include/python3.12/Python.h"
+#include <Python.h>
 
 typedef struct matrix {
     int rows;      	// number of rows
