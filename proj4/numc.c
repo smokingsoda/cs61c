@@ -597,48 +597,30 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     /* TODO: YOUR CODE HERE */
-    if (!PyLong_Check(key))
-    {
-        PyErr_SetString(PyExc_TypeError, "Key is not valid");
-        return -1;
+
+    Py_ssize_t row_offset = 0, col_offset = 0;
+    Py_ssize_t row = self->mat->rows, col = self->mat->cols;
+
+    int is_single_num = parse_subscript(self, key, &row_offset, &col_offset, &row, &col);
+
+    if (is_single_num == 1) {
+        double result = get(self->mat, row_offset, col_offset);
+        return Py_BuildValue("d", result);
+    } else if (is_single_num == 0) {
+        matrix* tmp_mat = NULL;
+        Matrix61c* rv = (Matrix61c*)Matrix61c_new(&Matrix61cType, NULL, NULL);
+
+        int allocate_failed = allocate_matrix_ref(&tmp_mat, self->mat, row_offset, col_offset, row, col);
+        if (allocate_failed) return NULL;
+
+        rv->mat = tmp_mat;
+        rv->shape = get_shape(tmp_mat->rows, tmp_mat->cols);
+        return (PyObject*)rv;
+    } else {
+        /* Return value is -1, execution failed */
+        PyErr_SetString(PyExc_RuntimeError, "Something wrong happened when parsing subscripts");
+        return NULL;
     }
-    int index = PyLong_AsLong(key);
-    if (index >= self->mat->rows || index < 0)
-    {
-        PyErr_SetString(PyExc_IndexError, "Index out of range");
-        return -1;
-    }
-    int cols = self->mat->cols;
-    if (cols == 1)
-    {
-        if (!PyFloat_Check(v) && !PyLong_Check(v))
-        {
-            PyErr_SetString(PyExc_TypeError, "Value is not valid");
-            return -1;
-        }
-        double val = PyFloat_AsDouble(v);
-        set(self->mat, index, 0, val);
-        return 0;
-    }
-    else
-    {
-        if (!PyList_Check(v))
-        {
-            PyErr_SetString(PyExc_TypeError, "Value is not valid");
-            return -1;
-        }
-        for (int i = 0; i < cols; i++)
-        {
-            if (!PyFloat_Check(PyList_GetItem(v, i)) && !PyLong_Check(PyList_GetItem(v, i)))
-            {
-                PyErr_SetString(PyExc_TypeError, "Value is not valid");
-                return -1;
-            }
-            set(self->mat, index, i, PyFloat_AsDouble(PyList_GetItem(v, i)));
-        }
-        return 0;
-    }
-    return -1;
 }
 
 PyMappingMethods Matrix61c_mapping = {
