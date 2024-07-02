@@ -306,10 +306,10 @@ int abs_matrix(matrix *result, matrix *mat) {
     }
     for (int i = 0; i < mat->rows; ++i) {
         for (int j = 0; j < mat->cols; ++j) {
-            if (*(*((mat->data) + i) + j) >= 0) {
-                *(*((result->data) + i) + j) = *(*((mat->data) + i) + j);
+            if (mat->data[i][j] >= 0) {
+                result->data[i][j]= mat->data[i][j];
             } else {
-                *(*((result->data) + i) + j) = 0 - *(*((mat->data) + i) + j);
+                result->data[i][j]= 0 - mat->data[i][j];;
             }
         }
     }
