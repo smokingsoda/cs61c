@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -g -O0 -Wall -std=c99 -fopenmp -mavx -mfma -pthread
 LDFLAGS = -fopenmp
 CUNIT = -lcunit
-PYTHON_VERSION = 3.11
+PYTHON_VERSION = 3.10
 PYTHON = -lpython$(PYTHON_VERSION)
 
 install: install_dumbpy
