@@ -301,9 +301,6 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
-    if (result->rows != mat->rows || result->cols != mat->cols) {
-        return -1;
-    }
     for (int i = 0; i < mat->rows; ++i) {
         for (int j = 0; j < mat->cols; ++j) {
             if (mat->data[i][j] >= 0) {
