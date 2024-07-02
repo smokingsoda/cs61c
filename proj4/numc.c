@@ -1,5 +1,5 @@
 #include "numc.h"
-#include "/opt/homebrew/Cellar/python@3.12/3.12.4/Frameworks/Python.framework/Versions/3.12/include/python3.12/structmember.h"
+#include <structmember.h>
 
 PyTypeObject Matrix61cType;
 

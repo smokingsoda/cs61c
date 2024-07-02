@@ -1,7 +1,6 @@
 #include <stdio.h>
-
-#include "/opt/homebrew/Cellar/cunit/2.1-3/include/CUnit/Basic.h"
-#include "/opt/homebrew/Cellar/cunit/2.1-3/include/CUnit/CUnit.h"
+#include "CUnit/Basic.h"
+#include "CUnit/CUnit.h"
 #include "matrix.h"
 
 /* Test Suite setup and cleanup functions: */
