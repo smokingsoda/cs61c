@@ -13,7 +13,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd34607d-188e-458e-8182-814eb967b5cf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/matrix.h" beforeDir="false" afterPath="$PROJECT_DIR$/matrix.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/numc.c" beforeDir="false" afterPath="$PROJECT_DIR$/numc.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -125,7 +124,7 @@
       <workItem from="1719472023616" duration="3369000" />
       <workItem from="1719480090701" duration="6686000" />
       <workItem from="1719551392977" duration="8363000" />
-      <workItem from="1719906439244" duration="3702000" />
+      <workItem from="1719906439244" duration="3992000" />
     </task>
     <servers />
   </component>
