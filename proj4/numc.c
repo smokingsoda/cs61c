@@ -759,6 +759,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     /* TODO: YOUR CODE HERE */
+    int key_flag = parse_key(key);
+    int v_flag = parse_v(v);
     return -1;
 }
 
@@ -797,6 +799,46 @@ int parse_key(PyObject* key) {
     }
 }
 
+/*
+ * Return 0 if v is an int, 1 if v is a float, 2 if v is 1D list (float or int), 
+ * 3 if v is 2D list, 
+ * -1 if list length is less than 1, -2 if the elements of the list are not consistent
+ * 
+ */
+int parse_v(PyObject* v) {
+    if (PyLong_Check(v)) {
+        return 0;
+    } else if (PyFloat_Check(v)) {
+        return 1;
+    } else if (PyList_Check(v)) {
+        Py_ssize_t length = PyList_Size(v);
+        if (length < 1) {
+            return -1;
+        }
+        PyObject *item0 = PyList_GetItem(v, 0);
+        if (PyLong_Check(item0) || PyFloat_Check(item0)) {
+            PyObject *item;
+            for (int i = 0; i < length; i++) {
+                item = PyList_GetItem(v, i);
+                if (!PyLong_Check(item) && !PyFloat_Check(item)) {
+                    return -2;
+                }
+            }
+            return 2;
+        } else if (PyList_Check(item0)) {
+            if (length != 2) {
+                return -2;
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+    
+}
 PyMappingMethods Matrix61c_mapping = {
     NULL,
     (binaryfunc) Matrix61c_subscript,
