@@ -545,6 +545,39 @@ PyMethodDef Matrix61c_methods[] = {
 PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     /* TODO: YOUR CODE HERE */
     int flag = parse_key(key);
+    if (self->mat->is_1d) {
+        if (flag == 0) {
+            //Single int
+            int index = PyLong_AsLong(key);
+            if (self->mat->rows == 1) {
+                return Matrix61c_get_value(self, get_shape(0, index));
+            } else {
+                return Matrix61c_get_value(self, get_shape(index, 0));
+            }
+        } else if (flag == 1) {
+            //Single slice
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            Py_ssize_t start, stop, step;
+            if (PySlice_Unpack(key, &start, &stop, &step) < 0) {
+                PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+                return NULL;
+            }
+            if (self->mat->rows == 1) {
+                flag = allocate_matrix_ref(&(rv->mat),self->mat, 0, start, 1, stop - start);
+            } else {
+                flag = allocate_matrix_ref(&(rv->mat),self->mat, start, 0, stop - start, 1);
+            }
+            if (flag == -1) {
+                PyErr_SetString(PyExc_IndexError, "Index out of range");
+                return NULL;
+            } else if (flag == -2) {
+                PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+                return NULL;
+            }
+            return (PyObject*) rv;
+        }
+    }
+    
     if (flag == -3) {
         PyErr_SetString(PyExc_TypeError, "Key is not a tuple");
         return NULL;
