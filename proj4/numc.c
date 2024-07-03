@@ -426,18 +426,16 @@ PyObject *Matrix61c_neg(Matrix61c* self) {
  */
 PyObject *Matrix61c_abs(Matrix61c *self) {
     /* TODO: YOUR CODE HERE */
-    Matrix61c* wrap = (Matrix61c*) Matrix61c_new(&Matrix61cType, NULL, NULL);
-    matrix* realMat1 = self->mat;
-    int rows1 = realMat1->rows;
-    int cols1 = realMat1->cols;
+    Matrix61c* rv = (Matrix61c*)Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix* tmp_mat = NULL;
+    int allocate_failed = allocate_matrix(&tmp_mat, self->mat->rows, self->mat->cols);
+    if (allocate_failed) return NULL;
 
-    matrix** result = malloc(sizeof(matrix*)); // allocate matrix, allocate matrix61c object using new , get->shape
-    allocate_matrix(result, rows1, cols1); //we forgot that we already made an allocate_matrix method in matrix.c
-    abs_matrix(*result, realMat1);
+    abs_matrix(tmp_mat, self->mat);
 
-    wrap->mat = *result;
-    wrap->shape = get_shape(rows1, cols1);
-    return  (PyObject *) wrap;
+    rv->mat = tmp_mat;
+    rv->shape = get_shape(tmp_mat->rows, tmp_mat->cols);
+    return (PyObject*)rv;
 }
 
 /*
@@ -536,7 +534,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "row or column index out of range");
         return NULL;
     }
-    return PyFloat_FromDouble(get(self->mat, row, col));
+    return Py_BuildValue("d", get(self->mat, row, col));
 }
 
 /*
