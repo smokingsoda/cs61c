@@ -556,9 +556,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         return NULL;
     } else if (flag == 0) {
         //Single number
-        PyObject *item0;
-        item0 = PyTuple_GetItem(key, 0);
-        int row_index = PyLong_AsLong(item0);
+        int row_index = PyLong_AsLong(key);
         if (row_index >= self->mat->rows) {
             PyErr_SetString(PyExc_IndexError, "Index out of range");
             return NULL;
@@ -575,8 +573,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         return (PyObject*) rv;
     } else if (flag == 1) {
         //Single slice
-        PyObject *slice;
-        slice = PyTuple_GetItem(key, 0);
+        PyObject *slice = key;
         Py_ssize_t start, stop, step;
         if (PySlice_Unpack(slice, &start, &stop, &step) < 0) {
             PyErr_SetString(PyExc_ValueError, "Invalid slice object");
@@ -692,6 +689,9 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             }
             return (PyObject*) rv;
         }
+    } else if (flag == 5) {
+        //two ints
+        return Matrix61c_get_value(self, key);
     } else {
         return NULL;
     }
@@ -708,24 +708,23 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
 
 /*
  * Return 0 if key is a single number, 1 if key is a single slice, 2 if int and slice, 
- * 3 if slice and int, 4 for two slices, -1 if tuple size is wrong, -2 if tuple element type is wrong, 
- * -3 if key is not a tuple.
+ * 3 if slice and int, 4 for two slices, 5 for two ints, -1 if tuple size is wrong, -2 if tuple element type is wrong, 
+ * -3 if key is not a tuple or an int or a slice.
  */
 int parse_key(PyObject* key) {
     if (!PyTuple_Check(key)) {
-        return -3;
-    }
-    Py_ssize_t size = PyTuple_Size(key);
-    if (size == 1) {
-        PyObject *item = PyTuple_GetItem(key, 0);
-        if (PyLong_Check(item)) {
+        if (PyLong_Check(key)) {
             return 0;
-        } else if (PySlice_Check(item)) {
+        } else if (PySlice_Check(key)) {
             return 1;
         } else {
-            return -2;
+            return -3;
         }
-    } else if (size == 2) {
+    }
+    Py_ssize_t size = PyTuple_Size(key);
+    if (size != 2) {
+        return -1;
+    } else {
         PyObject *item0 = PyTuple_GetItem(key, 0);
         PyObject *item1 = PyTuple_GetItem(key, 1);
         if (PyLong_Check(item0) && PySlice_Check(item1)) {
@@ -734,13 +733,12 @@ int parse_key(PyObject* key) {
             return 3;
         } else if (PySlice_Check(item0) && PySlice_Check(item1)) {
             return 4;
+        } else if (PyLong_Check(item0) && PyLong_Check(item1)) {
+            return 5;
         } else {
             return -2;
         }
-    } else {
-        return -1;
     }
-    
 }
 
 PyMappingMethods Matrix61c_mapping = {
