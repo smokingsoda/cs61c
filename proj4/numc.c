@@ -552,43 +552,6 @@ PyMethodDef Matrix61c_methods[] = {
 
 /* INDEXING */
 
-/*
- * Given a numc.Matrix `self`, index into it with `key`. Return the indexed result.
- */
-PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
-    /* TODO: YOUR CODE HERE */
-    if (!PyLong_Check(key))
-    {
-        PyErr_SetString(PyExc_TypeError, "Key is not valid");
-        return NULL;
-    }
-    int index = PyLong_AsLong(key);
-    if (index >= self->mat->rows || index < 0)
-    {
-        PyErr_SetString(PyExc_IndexError, "Index out of range");
-        return NULL;
-    }
-    matrix *new_mat;
-    int ref_failed = allocate_matrix_ref(&new_mat, self->mat, index * self->mat->cols, self->mat->cols, 1, 1);
-    if (ref_failed == -1)
-    {
-        PyErr_SetString(PyExc_ValueError, "Dimensions must be positive");
-        return NULL;
-    }
-    else if (ref_failed == -2)
-    {
-        PyErr_SetString(PyExc_RuntimeError, "Failed to allocate matrix");
-        return NULL;
-    }
-    Matrix61c *rv = (Matrix61c *)Matrix61c_new(&Matrix61cType, NULL, NULL);
-    rv->mat = new_mat;
-    rv->shape = PyTuple_Pack(2, PyLong_FromLong(new_mat->rows), PyLong_FromLong(1));
-    if (new_mat->rows == 1)
-    { // if one single number, unwrap from list
-        return PyFloat_FromDouble(*new_mat->data[0]);
-    }
-    return (PyObject *)rv;
-}
 
 /*
  * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
