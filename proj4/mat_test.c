@@ -234,6 +234,7 @@ void alloc_ref_test2(void) {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 3; j++) {
             CU_ASSERT_EQUAL(get(mat1, i, j), get(from, i + 1, j + 1));
+            printf("Double (default precision): %f\n", get(mat1, i, j));
         }
     }
     /* Now we compare the data in the reference matrix */
