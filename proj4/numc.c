@@ -554,11 +554,10 @@ PyMethodDef Matrix61c_methods[] = {
 
 
 /*
- * Given a numc.Matrix `self`, index into it with `key`, and set the indexed result to `v`.
+ * Given a numc.Matrix `self`, index into it with `key`. Return the indexed result.
  */
-int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
-    /* TODO: YOUR CODE HERE */
- 
+PyObject* Matrix61c_subscript(Matrix61c* self, PyObject* key) {
+    /* YOUR CODE HERE */
 
     Py_ssize_t row_offset = 0, col_offset = 0;
     Py_ssize_t row = self->mat->rows, col = self->mat->cols;

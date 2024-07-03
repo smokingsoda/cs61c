@@ -12,9 +12,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd34607d-188e-458e-8182-814eb967b5cf" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/numc.c" beforeDir="false" afterPath="$PROJECT_DIR$/numc.c" afterDir="false" />
-    </list>
+    <list default="true" id="dd34607d-188e-458e-8182-814eb967b5cf" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
