@@ -109,11 +109,13 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offs
     }
     (*mat)->rows = rows;
     (*mat)->cols = cols;
-//    (*mat)->data = (double **) malloc(sizeof(double *) * (*mat)->rows);
-//    if ((*mat)->data == NULL) {
-//        return -2;
-//   }
-    (*mat)->data = from->data + row_offset;
+    (*mat)->data = (double **) malloc(sizeof(double *) * (*mat)->rows);
+    if ((*mat)->data == NULL) {
+        return -2;
+   }
+   for (int i = 0; i < rows; i++) {
+        *((*mat)->data + i) = (*(from->data + row_offset + i)) + col_offset;
+   }
     from->ref_cnt += 1;
     (*mat)->ref_cnt = from->ref_cnt;
     (*mat)->parent = from;

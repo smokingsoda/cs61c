@@ -226,7 +226,7 @@ void alloc_ref_test2(void) {
         }
     }
     /* 2D slice */
-    CU_ASSERT_EQUAL(allocate_matrix_ref(&mat1, from, 1, 0, 2, 2), 0);
+    CU_ASSERT_EQUAL(allocate_matrix_ref(&mat1, from, 1, 1, 2, 2), 0);
     CU_ASSERT_PTR_EQUAL(mat1->parent, from);
     CU_ASSERT_EQUAL(mat1->parent->ref_cnt, 2);
     CU_ASSERT_EQUAL(mat1->rows, 2);
