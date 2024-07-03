@@ -703,7 +703,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
  */
 int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     /* TODO: YOUR CODE HERE */
-
+    return -1;
 }
 
 /*
@@ -728,7 +728,7 @@ int parse_key(PyObject* key) {
     } else if (size == 2) {
         PyObject *item0 = PyTuple_GetItem(key, 0);
         PyObject *item1 = PyTuple_GetItem(key, 1);
-        if (PyLong_Check(item0) && PySliceCheck(item1)) {
+        if (PyLong_Check(item0) && PySlice_Check(item1)) {
             return 2;
         } else if (PySlice_Check(item0) && PyLong_Check(item1)) {
             return 3;
