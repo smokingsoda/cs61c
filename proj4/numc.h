@@ -30,3 +30,6 @@ PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args);
 PyObject *Matrix61c_neg(Matrix61c* self);
 PyObject *Matrix61c_abs(Matrix61c *self);
 PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional);
+
+/* Custom Functions */
+int parse_key(PyObject* key);

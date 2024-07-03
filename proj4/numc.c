@@ -557,7 +557,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     } else if (flag == 0) {
         //Single number
         PyObject *item0;
-        PyTuple_GetItem(item0, 0);
+        item0 = PyTuple_GetItem(key, 0);
         int row_index = PyLong_AsLong(item0);
         if (row_index >= self->mat->rows) {
             PyErr_SetString(PyExc_IndexError, "Index out of range");
@@ -576,7 +576,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
     } else if (flag == 1) {
         //Single slice
         PyObject *slice;
-        PyTuple_GetItem(slice, 0);
+        slice = PyTuple_GetItem(key, 0);
         Py_ssize_t start, stop, step;
         if (PySlice_Unpack(slice, &start, &stop, &step) < 0) {
             PyErr_SetString(PyExc_ValueError, "Invalid slice object");
@@ -596,8 +596,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         //int and slice
         PyObject *item0;
         PyObject *slice;
-        PyTuple_GetItem(item0, 0);
-        PyTuple_GetItem(slice, 1);
+        item0 = PyTuple_GetItem(key, 0);
+        slice = PyTuple_GetItem(key, 1);
 
         int row_index = PyLong_AsLong(item0);
         if (row_index >= self->mat->rows) {
@@ -623,8 +623,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         //slice and int
         PyObject *slice;
         PyObject *item1;
-        PyTuple_GetItem(slice, 0);
-        PyTuple_GetItem(item1, 1);
+        slice = PyTuple_GetItem(key, 0);
+        item1 = PyTuple_GetItem(key, 1);
 
         int col_index = PyLong_AsLong(item1);
         if (col_index >= self->mat->cols) {
@@ -650,8 +650,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         //two slices
         PyObject *slice0;
         PyObject *slice1;
-        PyTuple_GetItem(slice0, 0);
-        PyTuple_GetItem(slice1, 1);
+        slice0 = PyTuple_GetItem(key, 0);
+        slice1 = PyTuple_GetItem(key, 1);
 
         Py_ssize_t start0, stop0, step0;
         if (PySlice_Unpack(slice0, &start0, &stop0, &step0) < 0) {
