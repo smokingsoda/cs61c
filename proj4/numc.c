@@ -509,8 +509,7 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
 PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
     int row, col;
-    double val;
-    if (!PyArg_ParseTuple(args, "iid", &row, &col, &val))
+    if (!PyArg_ParseTuple(args, "ii", &row, &col))
     {
         PyErr_SetString(PyExc_TypeError, "Invalid arguments");
         return NULL;
@@ -563,7 +562,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             return NULL;
         }
         Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
-        flag = allocate_matrix_ref(&(rv->mat),self->mat, row_index, 0, 0, self->mat->cols);
+        flag = allocate_matrix_ref(&(rv->mat),self->mat, row_index, 0, 1, self->mat->cols);
         if (flag == -1) {
             PyErr_SetString(PyExc_IndexError, "Index out of range");
             return NULL;
@@ -582,7 +581,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             return NULL;
         }
         Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
-        flag = allocate_matrix_ref(&(rv->mat),self->mat, start, stop, 0, self->mat->cols);
+        flag = allocate_matrix_ref(&(rv->mat),self->mat, start, 0, stop - start, self->mat->cols);
         if (flag == -1) {
             PyErr_SetString(PyExc_IndexError, "Index out of range");
             return NULL;
@@ -610,8 +609,87 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
         }
 
         Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
-        flag = allocate_matrix_ref(&(rv->mat),self->mat, row_index, start, 0, self->mat->cols);
+        flag = allocate_matrix_ref(&(rv->mat),self->mat, row_index, start, 1, stop - start);
+        if (flag == -1) {
+            PyErr_SetString(PyExc_IndexError, "Index out of range");
+            return NULL;
+        } else if (flag == -2) {
+            PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+            return NULL;
+        }
+    } else if (flag == 3) {
+        //slice and int
+        PyObject *slice;
+        PyObject *item1;
+        PyTuple_GetItem(slice, 0);
+        PyTuple_GetItem(item1, 1);
+
+        int col_index = PyLong_AsLong(item1);
+        if (col_index >= self->mat->cols) {
+            PyErr_SetString(PyExc_IndexError, "Index out of range");
+            return NULL;
+        }
+        Py_ssize_t start, stop, step;
+        if (PySlice_Unpack(slice, &start, &stop, &step) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+
+        Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+        flag = allocate_matrix_ref(&(rv->mat),self->mat, start, col_index, stop - start, 1);
+        if (flag == -1) {
+            PyErr_SetString(PyExc_IndexError, "Index out of range");
+            return NULL;
+        } else if (flag == -2) {
+            PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+            return NULL;
+        }
+    } else if (flag == 4) {
+        //two slices
+        PyObject *slice0;
+        PyObject *slice1;
+        PyTuple_GetItem(slice0, 0);
+        PyTuple_GetItem(slice1, 1);
+
+        Py_ssize_t start0, stop0, step0;
+        if (PySlice_Unpack(slice0, &start0, &stop0, &step0) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (start0 >= self->mat->rows || stop0 >= self->mat->rows) {
+            PyErr_SetString(PyExc_IndexError, "Index out of range");
+            return NULL;
+        }
+
+        Py_ssize_t start1, stop1, step1;
+        if (PySlice_Unpack(slice1, &start1, &stop1, &step1) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+
+        if (start1 >= self->mat->cols || stop1 >= self->mat->rows) {
+            PyErr_SetString(PyExc_IndexError, "Index out of range");
+            return NULL;
+        }
+
+        if (stop0 - start0 == 1 && stop1 - start1 == 1) {
+            //return single number
+            PyObject *rv = Matrix61c_get_value(self->mat, get_shape(start0, start1));
+        } else {
+            Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+            flag = allocate_matrix_ref(&(rv->mat),self->mat, start0, start1, stop0 - start0, stop1 - start1);
+            if (flag == -1) {
+                PyErr_SetString(PyExc_IndexError, "Index out of range");
+                return NULL;
+        } else if (flag == -2) {
+                PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+                return NULL;
+            }
+        }
+    } else {
+        return NULL;
     }
+    
 }
 
 /*
