@@ -374,15 +374,24 @@ PyObject* Matrix61c_neg(Matrix61c* self) {
  */
 PyObject* Matrix61c_abs(Matrix61c* self) {
     /* YOUR CODE HERE */
-    Matrix61c* rv = (Matrix61c*)Matrix61c_new(&Matrix61cType, NULL, NULL);
-    matrix* tmp_mat = NULL;
-    int allocate_failed = allocate_matrix(&tmp_mat, self->mat->rows, self->mat->cols);
-    if (allocate_failed) return NULL;
-
-    abs_matrix(tmp_mat, self->mat);
-
-    rv->mat = tmp_mat;
-    rv->shape = get_shape(tmp_mat->rows, tmp_mat->cols);
+    Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
+    matrix *new_mat;
+    int flag;
+    flag = allocate_matrix(&new_mat, self->mat->rows, self->mat->cols);
+    if (flag == -2) {
+        PyErr_SetString(PyExc_RuntimeError, "Malloc fails");
+        return NULL;
+    } else if (flag == -1){
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->mat = new_mat;
+    flag = abs_matrix(rv->mat, self->mat);
+    if (flag == -1) {
+        PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
+        return NULL;
+    }
+    rv->shape = get_shape(rv->mat->rows, rv->mat->cols);
     return (PyObject*)rv;
 }
 
