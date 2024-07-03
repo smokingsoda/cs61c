@@ -575,6 +575,8 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
                 return NULL;
             }
             return (PyObject*) rv;
+        } else {
+            PyErr_SetString(PyExc_TypeError, "1D matrices only support single slice");
         }
     }
     
