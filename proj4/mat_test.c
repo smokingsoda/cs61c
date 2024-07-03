@@ -223,7 +223,7 @@ void alloc_ref_test2(void) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             set(from, i, j, i * 2 + j);
-            printf("Double (default precision): %f\n", i * 2 + j);
+            printf("Double (origin matrix): %f\n", (get(from, i, j)));
         }
     }
     /* 2D slice */
