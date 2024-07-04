@@ -98,27 +98,53 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
 int allocate_matrix_ref(matrix **mat, matrix *from, int row_offset, int col_offset,
                         int rows, int cols) {
     /* TODO: YOUR CODE HERE */
-    if (row_offset < 0 || col_offset < 0 || rows < 0 || cols < 0) {
+    /* TODO: YOUR CODE HERE */
+    if (rows <= 0 || cols <= 0) {
+        PyErr_SetString(PyExc_IndexError, "Rows and cols should be positive numbers");
+        PyErr_Print();
         return -1;
     }
-    *mat = (matrix *) malloc(sizeof(matrix));
-    if (rows == 1 || cols == 1) {
-        (*mat)->is_1d = -1;
-    } else {
-        (*mat)->is_1d = 0;
+
+    if (from != NULL && ((rows + row_offset) > from->rows || (cols + col_offset) > from->cols)) {
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds");
+        PyErr_Print();
+        return -1;
     }
+
+    *mat = (matrix*)malloc(sizeof(matrix));
+    double** data = (double**)malloc(sizeof(double*) * rows);
+
+    if (from == NULL) {
+        for (int r = 0; r < rows; r++) {
+            double* rData = (double*)malloc(sizeof(double) * cols);
+            if (rData == NULL) {
+                PyErr_SetString(PyExc_RuntimeError, "Fail to allocate the data of the matrix");
+                PyErr_Print();
+                return -1;
+            }
+            for (int c = 0; c < cols; c++) {
+                rData[c] = 0.0;
+            }
+            data[r] = rData;
+        }
+    } else {
+        for (int r = 0; r < rows; r++) {
+            double* rData = from->data[r + row_offset] + col_offset;
+            data[r] = rData;
+        }
+    }
+
+    if (from != NULL) {
+        from->ref_cnt += 1;
+    }
+
     (*mat)->rows = rows;
     (*mat)->cols = cols;
-    (*mat)->data = (double **) malloc(sizeof(double *) * (*mat)->rows);
-    if ((*mat)->data == NULL) {
-        return -2;
-   }
-   for (int i = 0; i < rows; i++) {
-        *((*mat)->data + i) = (*(from->data + row_offset + i)) + col_offset;
-   }
-    from->ref_cnt += 1;
-    (*mat)->ref_cnt = from->ref_cnt;
+    (*mat)->data = data;
+    (*mat)->ref_cnt = 1;
+    (*mat)->is_1d = (rows == 1 || cols == 1) ? 1 : 0;
     (*mat)->parent = from;
+
     return 0;
 }
 
