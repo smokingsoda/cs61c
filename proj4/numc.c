@@ -831,7 +831,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                     set(self->mat, i, j, value);
                 } else {
                     double value = PyFloat_AsDouble(value_object);
-                    set(self->mat, i, j, value)
+                    set(self->mat, i, j, value);
                 }
             }
         }
