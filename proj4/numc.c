@@ -493,7 +493,7 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     double value = 0.0;
     PyArg_ParseTuple(args, "iid", &row, &col, &value);
     if (row >= self->mat->rows || col >= self->mat->cols) {
-        PyErr_SetString(PyExc_IndexError, "Index out of bounds");
+        PyErr_SetString(PyExc_IndexError, "Index out of range");
         return NULL;
     }
     set(self->mat, row, col, value);
