@@ -767,6 +767,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     if (key_flag == 0 && (v_flag >= 0 && v_flag <= 2)) {
         //a[5]
         int row_index = PyLong_AsLong(key);
+	    printf("%s", "now we are in a[i] section");
         if (v_flag == 0) {
             // a[5] = 3
             int value = PyLong_AsLong(v);
