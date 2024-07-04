@@ -397,6 +397,7 @@ PyObject *Matrix61c_neg(Matrix61c* self) {
     }
     rv->mat = new_mat;
     rv->shape = get_shape(new_mat->rows, new_mat->cols);
+    flag = neg_matrix(rv->mat, self->mat);
     if (flag == -1) {
         PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
         return NULL;
