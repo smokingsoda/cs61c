@@ -1018,7 +1018,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         }
         for (int i = start0; i < stop0; i++) {
             PyObject *sub_list = PyList_GetItem(v, i - start0);
-            for (int j = start1; i < stop1; j++) {
+            for (int j = start1; j < stop1; j++) {
                 PyObject *element = PyList_GetItem(sub_list, j - start1);
                 if (PyLong_Check(element)) {
                     int value = PyLong_AsLong(element);
