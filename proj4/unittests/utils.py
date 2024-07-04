@@ -104,19 +104,23 @@ def rand_md5(mat: Union[dp.Matrix, nc.Matrix]):
         if total_cnt < num_samples:
             for i in range(rows):
                 for j in range(cols):
+                    print(mat[i][j])
                     m.update(struct.pack("f", round(mat[i][j], decimal_places)))
         else:
             for _ in range(num_samples):
                 i = np.random.randint(rows)
                 j = np.random.randint(cols)
+                print(mat[i][j])
                 m.update(struct.pack("f", round(mat[i][j], decimal_places)))
     else:
         total_cnt = mat.shape[0]
         if total_cnt < num_samples:
             for i in range(total_cnt):
+                print(mat[i][j])
                 m.update(struct.pack("f", round(mat[i], decimal_places)))
         else:
             for _ in range(num_samples):
                 i = np.random.randint(total_cnt)
+                
                 m.update(struct.pack("f", round(mat[i], decimal_places)))
     return m.digest()
