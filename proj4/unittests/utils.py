@@ -121,6 +121,5 @@ def rand_md5(mat: Union[dp.Matrix, nc.Matrix]):
         else:
             for _ in range(num_samples):
                 i = np.random.randint(total_cnt)
-                
                 m.update(struct.pack("f", round(mat[i], decimal_places)))
     return m.digest()
