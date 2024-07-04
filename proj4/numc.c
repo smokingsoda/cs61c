@@ -772,10 +772,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         int row_index = PyLong_AsLong(key);
         if (v_flag == 0) {
             // a[5] = 3
-            PyRun_SimpleString("print('PyLong_AsLong')");
             int value = PyLong_AsLong(v);
             for (int i = 0; i < self->mat->cols; i++) {
-                PyRun_SimpleString("print('Setting...')");
+                PyErr_SetString(PyExc_IndexError, "Setting");
+                return -1;
                 Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
             }
             return 0;
