@@ -510,14 +510,17 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
  */
 PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
-    int row, col;
+    int row = 0;
+    int col = 0;
+    double result = 0.0;
+    /* This line can raise TypeError when necessary */
     PyArg_ParseTuple(args, "ii", &row, &col);
-    if (row < 0 || col < 0 || row >= self->mat->rows || col >= self->mat->cols)
-    {
-        PyErr_SetString(PyExc_IndexError, "row or column index out of range");
+    if (row >= self->mat->rows || col >= self->mat->cols) {
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds");
         return NULL;
     }
-    return Py_BuildValue("d", get(self->mat, row, col));
+    result = get(self->mat, row, col);
+    return Py_BuildValue("d", result);
 }
 
 /*
