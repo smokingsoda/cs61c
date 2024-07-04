@@ -165,7 +165,7 @@ void set(matrix *mat, int row, int col, double val) {
     /* TODO: YOUR CODE HERE */
     if (row < 0 || col < 0 || row >= mat->rows || row >= mat->cols) {
         PyErr_SetString(PyExc_IndexError, "Set Value Out of Range");
-        return NULL;
+        return;
     }
     *(*((mat->data) + row) + col) = val;
 }
