@@ -944,7 +944,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             // a[0:3, 2:5] = 3
             int value = PyLong_AsLong(v);
             for (int i = start0; i < stop0; i++) {
-                for (int j = 0; j < stop1; i++) {
+                for (int j = 0; j < stop1; j++) {
                     set(self->mat, i, j, value);
                 }
             }
@@ -953,7 +953,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             // a[1:3, 2] = 3.3
             double value = PyFloat_AsDouble(v);
             for (int i = start0; i < stop0; i++) {
-                for (int j = 0; j < stop1; i++) {
+                for (int j = 0; j < stop1; j++) {
                     set(self->mat, i, j, value);
                 }
             }
