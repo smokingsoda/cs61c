@@ -545,9 +545,9 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             //Single int
             int index = PyLong_AsLong(key);
             if (self->mat->rows == 1) {
-                return Matrix61c_get_value(self, get_shape(0, index));
+                return Py_BuildValue("d", get(self->mat, 0, index));
             } else {
-                return Matrix61c_get_value(self, get_shape(index, 0));
+                return Py_BuildValue("d", get(self->mat, index, 0));
             }
         } else if (flag == 1) {
             //Single slice
@@ -725,8 +725,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
 
         if (stop0 - start0 == 1 && stop1 - start1 == 1) {
             //return single number
-            PyObject *rv = Matrix61c_get_value(self, get_shape(start0, start1));
-            return (PyObject*) rv;
+            return Py_BuildValue("d", get(self->mat, start0, start1));
         } else {
             Matrix61c *rv = (Matrix61c *) Matrix61c_new(&Matrix61cType, NULL, NULL);
             flag = allocate_matrix_ref(&(rv->mat),self->mat, start0, start1, stop0 - start0, stop1 - start1);
