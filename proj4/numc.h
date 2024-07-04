@@ -33,3 +33,4 @@ PyObject *Matrix61c_pow(Matrix61c *self, PyObject *pow, PyObject *optional);
 
 /* Custom Functions */
 int parse_key(PyObject* key);
+int parse_v(PyObject* v);
