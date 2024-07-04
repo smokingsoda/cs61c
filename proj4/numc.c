@@ -521,7 +521,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
         PyErr_SetString(PyExc_IndexError, "row or column index out of range");
         return NULL;
     }
-    return PyFloat_FromDouble(get(self->mat, row, col));
+    return Py_BuildValue("d", get(self->mat, row, col));
 }
 
 /*
