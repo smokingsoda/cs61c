@@ -763,7 +763,6 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     PyErr_SetString(PyExc_RuntimeError, "Next we will parse v");
     int v_flag = parse_v(v);
     PyErr_SetString(PyExc_RuntimeError, "Next we have parsed v");
-    return NULL;
     if (key_flag < 0 || v_flag < 0) {
         PyErr_SetString(PyExc_IndexError, "Something wrong");
         return -1;
@@ -772,6 +771,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         //a[5]
         int row_index = PyLong_AsLong(key);
         PyErr_SetString(PyExc_RuntimeError, "Next we will parse v");
+        return NULL;
         if (v_flag == 0) {
             // a[5] = 3
             int value = PyLong_AsLong(v);
