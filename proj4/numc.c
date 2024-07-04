@@ -1032,6 +1032,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 }
             }
         }
+        return 0;
     } else if (key_flag == 5 && (v_flag >= 0 && v_flag <= 2)) {
         int row = PyLong_AsLong(PyTuple_GetItem(key, 0));
         int col = PyLong_AsLong(PyTuple_GetItem(key, 1));
@@ -1046,7 +1047,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     }
     char s[50];
     sprintf(s, "key_flag: %d, v_flag: %d", key_flag, v_flag);
-    //PyErr_SetString(PyExc_IndexError, s);
+    PyErr_SetString(PyExc_IndexError, s);
     return -1;
 }
 
