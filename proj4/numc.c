@@ -931,7 +931,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         Py_ssize_t start0, stop0, step0;
         Py_ssize_t start1, stop1, step1;
         if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
-            PySlice_Unpack(PyTuple_GetItem(key, 0), &start1, &stop1, &step1) < 0) {
+            PySlice_Unpack(PyTuple_GetItem(key, 1), &start1, &stop1, &step1) < 0) {
             PyErr_SetString(PyExc_ValueError, "Invalid slice object");
             return -1;
         }
@@ -1001,7 +1001,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         Py_ssize_t start0, stop0, step0;
         Py_ssize_t start1, stop1, step1;
         if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
-            PySlice_Unpack(PyTuple_GetItem(key, 0), &start1, &stop1, &step1) < 0) {
+            PySlice_Unpack(PyTuple_GetItem(key, 1), &start1, &stop1, &step1) < 0) {
             PyErr_SetString(PyExc_ValueError, "Invalid slice object");
             return -1;
         }
@@ -1045,7 +1045,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         return 0;
     }
     char s[50];
-    sprintf(s, "key_flag: %d, v_flag %d", key_flag, v_flag);
+    sprintf(s, "key_flag: %d, v_flag: %d", key_flag, v_flag);
     PyErr_SetString(PyExc_IndexError, s);
     return -1;
 }
