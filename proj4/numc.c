@@ -763,7 +763,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         int row_index = PyLong_AsLong(key);
         if (v_flag == 0) {
             // a[5] = 3
-            int value = PyLong_AsLong(v);
+            double value = PyLong_AsDouble(v);
             for (int i = 0; i < self->mat->cols; i++) {
                 set(self->mat, row_index, i, value);
             }
@@ -785,7 +785,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             for (int i = 0; i < length; i++) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
-                    int value = PyLong_AsLong(item);
+                    double value = PyLong_AsDouble(item);
                     set(self->mat, row_index, i, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
@@ -818,7 +818,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             for (int j = 0; i < self->mat->cols; j++) {
                 PyObject *value_object = PyList_GetItem(sub_list, j);
                 if (PyLong_Check(value_object)) {
-                    int value = PyLong_AsLong(value_object);
+                    double value = PyLong_AsDouble(value_object);
                     set(self->mat, i, j, value);
                 } else {
                     double value = PyFloat_AsDouble(value_object);
@@ -841,7 +841,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         }
         if (v_flag == 0) {
             // a[2, 1:3] = 3
-            int value = PyLong_AsLong(v);
+            double value = PyLong_AsDouble(v);
             for (int i = start; i < stop; i++) {
                 set(self->mat, row_index, i, value);
             }
@@ -863,7 +863,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             for (int i = 0; i < length; i++) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
-                    int value = PyLong_AsLong(item);
+                    int value = PyLong_AsDouble(item);
                     set(self->mat, row_index, i, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
@@ -887,7 +887,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         }
         if (v_flag == 0) {
             // a[1:3, 2] = 3
-            int value = PyLong_AsLong(v);
+            double value = PyLong_AsDouble(v);
             for (int i = start; i < stop; i++) {
                 set(self->mat, i, col_index, value);
             }
@@ -909,7 +909,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             for (int i = 0; i < length; i++) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
-                    int value = PyLong_AsLong(item);
+                    double value = PyLong_AsDouble(item);
                     set(self->mat, i, col_index, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
@@ -937,7 +937,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         }
         if (v_flag == 0) {
             // a[0:3, 2:5] = 3
-            int value = PyLong_AsLong(v);
+            double value = PyLong_AsDouble(v);
             for (int i = start0; i < stop0; i++) {
                 for (int j = 0; j < stop1; j++) {
                     set(self->mat, i, j, value);
@@ -960,7 +960,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 for (int i = start1; i < stop1; i++) {
                     PyObject *item = PyList_GetItem(v, i);
                     if (PyLong_Check(item)) {
-                        int value = PyLong_AsLong(item);
+                        double value = PyLong_AsDouble(item);
                         set(self->mat, start0, i, value);
                     } else if (PyFloat_Check(item)) {
                         double value = PyFloat_AsDouble(item);
@@ -976,7 +976,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 for (int i = start0; i < stop0; i++) {
                     PyObject *item = PyList_GetItem(v, i);
                     if (PyLong_Check(item)) {
-                        int value = PyLong_AsLong(item);
+                        double value = PyLong_AsDouble(item);
                         set(self->mat, i, start1, value);
                     } else if (PyFloat_Check(item)) {
                         double value = PyFloat_AsDouble(item);
@@ -1016,7 +1016,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             for (int j = start1; j < stop1; j++) {
                 PyObject *element = PyList_GetItem(sub_list, j - start1);
                 if (PyLong_Check(element)) {
-                    int value = PyLong_AsLong(element);
+                    double value = PyLong_AsDouble(element);
                     set(self->mat, i, j, value);
                 } else if (PyFloat_Check(element)) {
                     double value = PyFloat_AsDouble(element);
@@ -1032,7 +1032,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         int row = PyLong_AsLong(PyTuple_GetItem(key, 0));
         int col = PyLong_AsLong(PyTuple_GetItem(key, 1));
         if (v_flag == 0) {
-            int value = PyLong_AsLong(v);
+            double value = PyLong_AsDouble(v);
             set(self->mat, row, col, value);
         } else {
             double value = PyLong_AsLong(v);
