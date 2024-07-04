@@ -1001,7 +1001,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 return -1;
             }
         }
-    } else if (key_flag == 4 && (v_flag >= 0 && v_flag <= 2)) {
+    } else if (key_flag == 4 && v_flag > 2) {
         Py_ssize_t start0, stop0, step0;
         Py_ssize_t start1, stop1, step1;
         if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
