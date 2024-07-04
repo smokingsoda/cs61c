@@ -764,7 +764,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         PyErr_SetString(PyExc_IndexError, "Something wrong");
         return -1;
     }
-    if (key_flag == 0 && (v_flag >= 0 || v_flag <= 2)) {
+    if (key_flag == 0 && (v_flag >= 0 && v_flag <= 2)) {
         //a[5]
         int row_index = PyLong_AsLong(key);
         if (v_flag == 0) {
@@ -833,7 +833,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             }
         }
         return 0;
-    } else if (key_flag == 2 && (v_flag >= 0 || v_flag <= 2)) {
+    } else if (key_flag == 2 && (v_flag >= 0 && v_flag <= 2)) {
         //a[2, 1:3]
         int row_index = PyLong_AsLong(PyTuple_GetItem(key, 0));
         Py_ssize_t start, stop, step;
@@ -880,7 +880,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 }
             }
         }
-    } else if (key_flag == 3 && (v_flag >= 0 || v_flag <= 2)) {
+    } else if (key_flag == 3 && (v_flag >= 0 && v_flag <= 2)) {
         int col_index = PyLong_AsLong(PyTuple_GetItem(key, 1));
         Py_ssize_t start, stop, step;
         if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start, &stop, &step) < 0) {
@@ -927,7 +927,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             }
             return 0;
         }
-    } else if (key_flag == 4 && (v_flag >= 0 || v_flag <= 2)) {
+    } else if (key_flag == 4 && (v_flag >= 0 && v_flag <= 2)) {
         //a[0:3, 2:5]
         Py_ssize_t start0, stop0, step0;
         Py_ssize_t start1, stop1, step1;
@@ -998,7 +998,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 return -1;
             }
         }
-    } else if (key_flag == 4 && (v_flag >= 0 || v_flag <= 2)) {
+    } else if (key_flag == 4 && (v_flag >= 0 && v_flag <= 2)) {
         Py_ssize_t start0, stop0, step0;
         Py_ssize_t start1, stop1, step1;
         if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
@@ -1033,7 +1033,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 }
             }
         }
-    } else if (key_flag == 5 && (v_flag >= 0 || v_flag <= 2)) {
+    } else if (key_flag == 5 && (v_flag >= 0 && v_flag <= 2)) {
         int row = PyLong_AsLong(PyTuple_GetItem(key, 0));
         int col = PyLong_AsLong(PyTuple_GetItem(key, 1));
         if (v_flag == 0) {
