@@ -564,7 +564,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             }
             if (step != 1 || stop - start < 1) {
                 PyErr_SetString(PyExc_ValueError, "Slice info not valid");
-            return NULL;
+                return NULL;
             }
             if (self->mat->rows == 1) {
                 flag = allocate_matrix_ref(&(rv->mat),self->mat, 0, start, 1, stop - start);
@@ -583,8 +583,7 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             PyErr_SetString(PyExc_TypeError, "1D matrices only support single slice");
             return NULL;
         }
-    }
-    
+    } 
     if (flag == -3) {
         PyErr_SetString(PyExc_TypeError, "Key is not a tuple");
         return NULL;
@@ -761,6 +760,291 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     /* TODO: YOUR CODE HERE */
     int key_flag = parse_key(key);
     int v_flag = parse_v(v);
+    if (key_flag < 0 || v_flag < 0) {
+        PyErr_SetString(PyExc_IndexError, "Something wrong");
+        return NULL;
+    }
+    if (key_flag == 0 && 0 <= v_flag <= 2) {
+        //a[5]
+        int row_index = PyLong_AsLong(key);
+        if (v_flag == 0) {
+            // a[5] = 3
+            int value = PyLong_AsLong(v);
+            for (int i = 0; i < self->mat->cols; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+            }
+            return 0;
+        } else if (v_flag == 1) {
+            // a[5] = 3.3
+            double value = PyFloat_AsDouble(v);
+            for (int i = 0; i < self->mat->cols; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+            }
+            return 0;
+        } else if (v_flag == 2) {
+            //a[5] = [3, 4, 5.5]
+            int length = PyList_Size(v);
+            if (self->mat->cols != length) {
+                PyErr_SetString(PyExc_ValueError, "Range error");
+                return NULL;
+            }
+            for (int i = 0; i < length; i++) {
+                PyObject *item = PyList_GetItem(v, i);
+                if (PyLong_Check(item)) {
+                    int value = PyLong_AsLong(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                } else if (PyFloat_Check(item)) {
+                    double value = PyFloat_AsDouble(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                } else {
+                    PyErr_SetString(PyExc_IndexError, "Something wrong_a[5] = [3, 4, 5.5]");
+                    return NULL;
+                }
+            }
+        }
+    } else if (key_flag == 1 && v_flag > 2) {
+        //a[0:3] = [[], [], []]
+        Py_ssize_t start, stop, step;
+        if (PySlice_Unpack(key, &start, &stop, &step) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (step != 1 || stop - start < 1) {
+            PyErr_SetString(PyExc_ValueError, "Slice info not valid");
+            return NULL;
+        }
+        int sub_length = PyList_Size((PyList_GetItem(v, 0)));
+        if (sub_length != self->mat->cols || stop - start != v_flag - 1) {
+            PyErr_SetString(PyExc_ValueError, "Given list has wrong length");
+            return NULL;
+        }
+        for (int i = start; i < stop; i++) {
+            PyObject *sub_list = PyList_GetItem(v, i - start);
+            for (int j = 0; i < self->mat->cols; j++) {
+                PyObject *value_object = PyList_GetItem(sub_list, j);
+
+                if (PyLong_Check(value_object)) {
+                    int value = PyLong_AsLong(value_object);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                } else {
+                    double value = PyFloat_AsDouble(value_object);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                }
+            }
+        }
+    } else if (key_flag == 2 && 0 <= v_flag <= 2) {
+        //a[2, 1:3]
+        int row_index = PyLong_AsLong(PyTuple_GetItem(key, 0));
+        Py_ssize_t start, stop, step;
+        if (PySlice_Unpack(PyTuple_GetItem(key, 1), &start, &stop, &step) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (step != 1 || stop - start < 1) {
+            PyErr_SetString(PyExc_ValueError, "Slice info not valid");
+            return NULL;
+        }
+        if (v_flag == 0) {
+            // a[2, 1:3] = 3
+            int value = PyLong_AsLong(v);
+            for (int i = start; i < stop; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+            }
+            return 0;
+        } else if (v_flag == 1) {
+            // a[2, 1:3] = 3.3
+            double value = PyFloat_AsDouble(v);
+            for (int i = start; i < stop; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+            }
+            return 0;
+        } else if (v_flag == 2) {
+            //a[2, 1:3] = [1, 2.4]
+            int length = PyList_Size(v);
+            if (stop - start != length) {
+                PyErr_SetString(PyExc_ValueError, "Range error");
+                return NULL;
+            }
+            for (int i = 0; i < length; i++) {
+                PyObject *item = PyList_GetItem(v, i);
+                if (PyLong_Check(item)) {
+                    int value = PyLong_AsLong(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                } else if (PyFloat_Check(item)) {
+                    double value = PyFloat_AsDouble(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                } else {
+                    PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
+                    return NULL;
+                }
+            }
+        }
+    } else if (key_flag == 3 && 0 <= v_flag <= 2) {
+        int col_index = PyLong_AsLong(PyTuple_GetItem(key, 1));
+        Py_ssize_t start, stop, step;
+        if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start, &stop, &step) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (step != 1 || stop - start < 1) {
+            PyErr_SetString(PyExc_ValueError, "Slice info not valid");
+            return NULL;
+        }
+        if (v_flag == 0) {
+            // a[1:3, 2] = 3
+            int value = PyLong_AsLong(v);
+            for (int i = start; i < stop; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+            }
+            return 0;
+        } else if (v_flag == 1) {
+            // a[1:3, 2] = 3.3
+            double value = PyFloat_AsDouble(v);
+            for (int i = start; i < stop; i++) {
+                Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+            }
+            return 0;
+        } else if (v_flag == 2) {
+            //a[1:3, 2] = [1, 2.4]
+            int length = PyList_Size(v);
+            if (stop - start != length) {
+                PyErr_SetString(PyExc_ValueError, "Range error");
+                return NULL;
+            }
+            for (int i = 0; i < length; i++) {
+                PyObject *item = PyList_GetItem(v, i);
+                if (PyLong_Check(item)) {
+                    int value = PyLong_AsLong(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                } else if (PyFloat_Check(item)) {
+                    double value = PyFloat_AsDouble(item);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                } else {
+                    PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
+                    return NULL;
+                }
+            }
+            return 0;
+        }
+    } else if (key_flag == 4 && 0 <= v_flag <= 2) {
+        //a[0:3, 2:5]
+        Py_ssize_t start0, stop0, step0;
+        Py_ssize_t start1, stop1, step1;
+        if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
+            PySlice_Unpack(PyTuple_GetItem(key, 0), &start1, &stop1, &step1) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (step0 != 1 || stop0 - start0 < 1 || 
+            step1 != 1 || stop1 - start1 < 1) {
+            PyErr_SetString(PyExc_ValueError, "Slice info not valid");
+            return NULL;
+        }
+        if (v_flag == 0) {
+            // a[0:3, 2:5] = 3
+            int value = PyLong_AsLong(v);
+            for (int i = start0; i < stop0; i++) {
+                for (int j = 0; j < stop1; i++) {
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                }
+            }
+            return 0;
+        } else if (v_flag == 1) {
+            // a[1:3, 2] = 3.3
+            double value = PyFloat_AsDouble(v);
+            for (int i = start0; i < stop0; i++) {
+                for (int j = 0; j < stop1; i++) {
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                }
+            }
+            return 0;
+        } else if (v_flag == 2) {
+            int length = PyList_Size(v);
+            if (stop0 - start0 == 1 && stop1 - start1 == length) {
+                //a[0:1, 2:10] = [...]
+                for (int i = start1; i < stop1; i++) {
+                    PyObject *item = PyList_GetItem(v, i);
+                    if (PyLong_Check(item)) {
+                        int value = PyLong_AsLong(item);
+                        Matrix61c_set_value(self, PyTuple_Pack(start0, i, value));
+                    } else if (PyFloat_Check(item)) {
+                        double value = PyFloat_AsDouble(item);
+                        Matrix61c_set_value(self, PyTuple_Pack(start0, i, value));
+                    } else {
+                        PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
+                        return NULL;
+                    }
+                }
+                return 0;
+            } else if (stop1 - start1 == 1 && stop0 - start0 == length) {
+                //a[2:10, 0:1] = [...]
+                for (int i = start0; i < stop0; i++) {
+                    PyObject *item = PyList_GetItem(v, i);
+                    if (PyLong_Check(item)) {
+                        int value = PyLong_AsLong(item);
+                        Matrix61c_set_value(self, PyTuple_Pack(i, start1, value));
+                    } else if (PyFloat_Check(item)) {
+                        double value = PyFloat_AsDouble(item);
+                        Matrix61c_set_value(self, PyTuple_Pack(i, start1, value));
+                    } else {
+                        PyErr_SetString(PyExc_IndexError, "Something wrong_a[1:2, 1:3] = [3, 4, 5.5]");
+                        return NULL;
+                    }
+                }
+                return 0;
+            } else {
+                PyErr_SetString(PyExc_IndexError, "Something wrong_a[1:2, 1:3] = [3, 4, 5.5]");
+                return NULL;
+            }
+        }
+    } else if (key_flag == 4 && v_flag > 2) {
+        Py_ssize_t start0, stop0, step0;
+        Py_ssize_t start1, stop1, step1;
+        if (PySlice_Unpack(PyTuple_GetItem(key, 0), &start0, &stop0, &step0) < 0 ||
+            PySlice_Unpack(PyTuple_GetItem(key, 0), &start1, &stop1, &step1) < 0) {
+            PyErr_SetString(PyExc_ValueError, "Invalid slice object");
+            return NULL;
+        }
+        if (step0 != 1 || stop0 - start0 < 1 || 
+            step1 != 1 || stop1 - start1 < 1) {
+            PyErr_SetString(PyExc_ValueError, "Slice info not valid");
+            return NULL;
+        }
+        int length = v_flag - 1;
+        int sub_length = PyList_Size(PyList_GetItem(v, 0));
+        if (stop0 - start0 != length || stop1 - start1 != sub_length) {
+            PyErr_SetString(PyExc_IndexError, "Something wrong_a[0:2, 1:3] = [[3, 4, 5.5], [???]]");
+            return NULL;
+        }
+        for (int i = start0; i < stop0; i++) {
+            PyObject *sub_list = PyList_GetItem(v, i - start0);
+            for (int j = start1; i < stop1; i++) {
+                PyObject *element = PyList_GetItem(sub_list, j - start1);
+                if (PyLong_Check(element)) {
+                    int value = PyLong_AsLong(element);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                } else if (PyFloat_Check(element)) {
+                    double value = PyFloat_AsDouble(element);
+                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                } else {
+                    PyErr_SetString(PyExc_IndexError, "Something wrong_a[1:2, 1:3] = [3, 4, 5.5]");
+                    return NULL;
+                }
+            }
+        }
+    } else if (key_flag == 5 && 0 <= v_flag <= 1) {
+        int row = PyTuple_GetItem(key, 0);
+        int col = PyTuple_GetItem(key, 1);
+        if (v_flag == 0) {
+            int value = PyLong_AsLong(v);
+            Matrix61c_set_value(self, PyTuple_Pack(row, col, value));
+        } else {
+            double value = PyLong_AsLong(v);
+            Matrix61c_set_value(self, PyTuple_Pack(row, col, value));
+        }
+        return 0;
+    }
+    PyErr_SetString(PyExc_IndexError, "Outside wrong");
     return -1;
 }
 
@@ -800,8 +1084,8 @@ int parse_key(PyObject* key) {
 }
 
 /*
- * Return 0 if v is an int, 1 if v is a float, 2 if v is 1D list (float or int), 
- * 3 if v is 2D list, 
+ * Return 0 if v is an int, 1 if v is a float, 2 if v is a valid 1D list (float or int), 
+ * (n + 1) if v is a valid N-D(n >= 2) list, 
  * -1 if list length is less than 1, -2 if the elements of the list are not consistent
  * 
  */
@@ -817,6 +1101,7 @@ int parse_v(PyObject* v) {
         }
         PyObject *item0 = PyList_GetItem(v, 0);
         if (PyLong_Check(item0) || PyFloat_Check(item0)) {
+            //[1, 2, 3, 4.4, ...]
             PyObject *item;
             for (int i = 0; i < length; i++) {
                 item = PyList_GetItem(v, i);
@@ -825,19 +1110,29 @@ int parse_v(PyObject* v) {
                 }
             }
             return 2;
-        } else if (PyList_Check(item0)) {
-            if (length != 2) {
-                return -2;
+        } else if (PyList_Check(item0) && length >= 2) {
+            //[[1, 2, 3, 4.4], [5.5, 6, 7.7, 8], [...]]
+            int sub_length = PyList_Size(item0);
+            for (int i = 0; i < length; i++) {
+                PyObject *item = PyList_GetItem(v, i);
+                int item_length = PyList_Size(item);
+                if (!PyList_Check(item) || item_length != sub_length) {
+                    return -2;
+                }
+                for (int j = 0; j < sub_length; j++) {
+                    PyObject *element = PyList_GetItem(item, j);
+                    if (!PyLong_Check(element) && !PyFloat_Check(element)) {
+                        return -2;
+                    }
+                }
             }
-            
-            
+            return length + 1;
+        } else {
+            return -3;
         }
-        
-        
+    } else {
+        return -4;
     }
-    
-    
-    
 }
 PyMappingMethods Matrix61c_mapping = {
     NULL,
