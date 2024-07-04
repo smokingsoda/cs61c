@@ -149,11 +149,6 @@ void deallocate_matrix(matrix *mat) {
  */
 double get(matrix *mat, int row, int col) {
     /* TODO: YOUR CODE HERE */
-    if (row < 0 || col < 0 || row >= mat->rows || col >= mat->cols) {
-        PyErr_SetString(PyExc_IndexError, "get Value Out of Range");
-        return -1;
-    }
-    
     return *(*((mat->data) + row) + col);
 }
 

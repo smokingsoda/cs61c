@@ -513,7 +513,7 @@ PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* This line can raise TypeError when necessary */
     PyArg_ParseTuple(args, "ii", &row, &col);
     if (row >= self->mat->rows || col >= self->mat->cols) {
-        PyErr_SetString(PyExc_IndexError, "Index out of bounds");
+        PyErr_SetString(PyExc_IndexError, "Index out of range");
         return NULL;
     }
     result = get(self->mat, row, col);
@@ -546,8 +546,16 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             //Single int
             int index = PyLong_AsLong(key);
             if (self->mat->rows == 1) {
-                return Py_BuildValue("d", get(self->mat, 0, index));
+                if (index >= self->mat->cols) {
+                    PyErr_SetString(PyExc_IndexError, "Get Value Out of Range");
+                    return -1;
+                }
+                    return Py_BuildValue("d", get(self->mat, 0, index));
             } else {
+                if (index >= self->mat->rows) {
+                    PyErr_SetString(PyExc_IndexError, "Get Value Out of Range");
+                    return -1;
+                }
                 return Py_BuildValue("d", get(self->mat, index, 0));
             }
         } else if (flag == 1) {
