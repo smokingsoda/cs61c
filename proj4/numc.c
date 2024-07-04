@@ -1044,7 +1044,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         }
         return 0;
     }
-    PyErr_SetString(PyExc_IndexError, "Outside wrong");
+    PyErr_Format(PyExc_IndexError, "key_flag: %s, v_flag %s", PyLong_AsString(PyLong_FromLong(key_flag)), PyLong_AsString(PyLong_FromLong(v_flag)));
     return -1;
 }
 
