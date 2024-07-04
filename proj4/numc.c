@@ -511,11 +511,7 @@ PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
 PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
     int row, col;
-    if (!PyArg_ParseTuple(args, "ii", &row, &col))
-    {
-        PyErr_SetString(PyExc_TypeError, "Invalid arguments");
-        return NULL;
-    }
+    PyArg_ParseTuple(args, "ii", &row, &col);
     if (row < 0 || col < 0 || row >= self->mat->rows || col >= self->mat->cols)
     {
         PyErr_SetString(PyExc_IndexError, "row or column index out of range");
