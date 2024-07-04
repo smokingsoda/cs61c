@@ -548,13 +548,13 @@ PyObject *Matrix61c_subscript(Matrix61c* self, PyObject* key) {
             if (self->mat->rows == 1) {
                 if (index >= self->mat->cols) {
                     PyErr_SetString(PyExc_IndexError, "Get Value Out of Range");
-                    return -1;
+                    return NULL;
                 }
                     return Py_BuildValue("d", get(self->mat, 0, index));
             } else {
                 if (index >= self->mat->rows) {
                     PyErr_SetString(PyExc_IndexError, "Get Value Out of Range");
-                    return -1;
+                    return NULL;
                 }
                 return Py_BuildValue("d", get(self->mat, index, 0));
             }
