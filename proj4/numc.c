@@ -1046,7 +1046,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
     }
     char s[50];
     sprintf(s, "key_flag: %d, v_flag: %d", key_flag, v_flag);
-    PyErr_SetString(PyExc_IndexError, s);
+    //PyErr_SetString(PyExc_IndexError, s);
     return -1;
 }
 
