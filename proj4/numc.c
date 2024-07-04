@@ -487,20 +487,16 @@ PyNumberMethods Matrix61c_as_number = {
  */
 PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     /* TODO: YOUR CODE HERE */
-    int row, col;
-    double val;
-    if (!PyArg_ParseTuple(args, "iid", &row, &col, &val))
-    {
-        PyErr_SetString(PyExc_TypeError, "Invalid arguments");
+    int row = 0;
+    int col = 0;
+    double value = 0.0;
+    PyArg_ParseTuple(args, "iid", &row, &col, &value);
+    if (row >= self->mat->rows || col >= self->mat->cols) {
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds");
         return NULL;
     }
-    if (row < 0 || col < 0 || row >= self->mat->rows || col >= self->mat->cols)
-    {
-        PyErr_SetString(PyExc_IndexError, "row or column index out of range");
-        return NULL;
-    }
-    set(self->mat, row, col, val);
-    return Py_BuildValue(NULL);
+    set(self->mat, row, col, value);
+    return Py_BuildValue("");
 }
 
 /*
