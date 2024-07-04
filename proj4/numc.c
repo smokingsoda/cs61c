@@ -774,19 +774,14 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             // a[5] = 3
             int value = PyLong_AsLong(v);
             for (int i = 0; i < self->mat->cols; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(3, PyLong_FromLong(row_index), PyLong_FromLong(i), PyLong_FromLong(value)));
-                //set(self->mat, row_index, i, value);
-                char s[50];
-                sprintf(s, "IndexError: %d", row_index);
-                //PyErr_SetString(PyExc_IndexError, s);
-                //return -1;
+                set(self->mat, row_index, i, value);
             }
             return 0;
         } else if (v_flag == 1) {
             // a[5] = 3.3
             double value = PyFloat_AsDouble(v);
             for (int i = 0; i < self->mat->cols; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                set(self->mat, row_index, i, value);
             }
             return 0;
         } else if (v_flag == 2) {
@@ -800,10 +795,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
                     int value = PyLong_AsLong(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                    set(self->mat, row_index, i, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                    set(self->mat, row_index, i, value);
                 } else {
                     PyErr_SetString(PyExc_IndexError, "Something wrong_a[5] = [3, 4, 5.5]");
                     return -1;
@@ -833,10 +828,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 PyObject *value_object = PyList_GetItem(sub_list, j);
                 if (PyLong_Check(value_object)) {
                     int value = PyLong_AsLong(value_object);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value);
                 } else {
                     double value = PyFloat_AsDouble(value_object);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value)
                 }
             }
         }
@@ -857,14 +852,14 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             // a[2, 1:3] = 3
             int value = PyLong_AsLong(v);
             for (int i = start; i < stop; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                set(self->mat, row_index, i, value);
             }
             return 0;
         } else if (v_flag == 1) {
             // a[2, 1:3] = 3.3
             double value = PyFloat_AsDouble(v);
             for (int i = start; i < stop; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                set(self->mat, row_index, i, value);
             }
             return 0;
         } else if (v_flag == 2) {
@@ -878,10 +873,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
                     int value = PyLong_AsLong(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                    set(self->mat, row_index, i, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(row_index, i, value));
+                    set(self->mat, row_index, i, value);
                 } else {
                     PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
                     return -1;
@@ -903,14 +898,14 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             // a[1:3, 2] = 3
             int value = PyLong_AsLong(v);
             for (int i = start; i < stop; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                set(self->mat, i, col_index, value);
             }
             return 0;
         } else if (v_flag == 1) {
             // a[1:3, 2] = 3.3
             double value = PyFloat_AsDouble(v);
             for (int i = start; i < stop; i++) {
-                Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                set(self->mat, i, col_index, value);
             }
             return 0;
         } else if (v_flag == 2) {
@@ -924,10 +919,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 PyObject *item = PyList_GetItem(v, i);
                 if (PyLong_Check(item)) {
                     int value = PyLong_AsLong(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                    set(self->mat, i, col_index, value);
                 } else if (PyFloat_Check(item)) {
                     double value = PyFloat_AsDouble(item);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, col_index, value));
+                    set(self->mat, i, col_index, value);
                 } else {
                     PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
                     return -1;
@@ -954,7 +949,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             int value = PyLong_AsLong(v);
             for (int i = start0; i < stop0; i++) {
                 for (int j = 0; j < stop1; i++) {
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value);
                 }
             }
             return 0;
@@ -963,7 +958,7 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
             double value = PyFloat_AsDouble(v);
             for (int i = start0; i < stop0; i++) {
                 for (int j = 0; j < stop1; i++) {
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value);
                 }
             }
             return 0;
@@ -975,10 +970,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                     PyObject *item = PyList_GetItem(v, i);
                     if (PyLong_Check(item)) {
                         int value = PyLong_AsLong(item);
-                        Matrix61c_set_value(self, PyTuple_Pack(start0, i, value));
+                        set(self->mat, start0, i, value);
                     } else if (PyFloat_Check(item)) {
                         double value = PyFloat_AsDouble(item);
-                        Matrix61c_set_value(self, PyTuple_Pack(start0, i, value));
+                        set(self->mat, start0, i, value);
                     } else {
                         PyErr_SetString(PyExc_IndexError, "Something wrong_a[2, 1:3] = [3, 4, 5.5]");
                         return -1;
@@ -991,10 +986,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                     PyObject *item = PyList_GetItem(v, i);
                     if (PyLong_Check(item)) {
                         int value = PyLong_AsLong(item);
-                        Matrix61c_set_value(self, PyTuple_Pack(i, start1, value));
+                        set(self->mat, i, start1, value);
                     } else if (PyFloat_Check(item)) {
                         double value = PyFloat_AsDouble(item);
-                        Matrix61c_set_value(self, PyTuple_Pack(i, start1, value));
+                        set(self->mat, i, start1, value);
                     } else {
                         PyErr_SetString(PyExc_IndexError, "Something wrong_a[1:2, 1:3] = [3, 4, 5.5]");
                         return -1;
@@ -1031,10 +1026,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
                 PyObject *element = PyList_GetItem(sub_list, j - start1);
                 if (PyLong_Check(element)) {
                     int value = PyLong_AsLong(element);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value);
                 } else if (PyFloat_Check(element)) {
                     double value = PyFloat_AsDouble(element);
-                    Matrix61c_set_value(self, PyTuple_Pack(i, j, value));
+                    set(self->mat, i, j, value);
                 } else {
                     PyErr_SetString(PyExc_IndexError, "Something wrong_a[1:2, 1:3] = [3, 4, 5.5]");
                     return -1;
@@ -1046,10 +1041,10 @@ int Matrix61c_set_subscript(Matrix61c* self, PyObject *key, PyObject *v) {
         int col = PyLong_AsLong(PyTuple_GetItem(key, 1));
         if (v_flag == 0) {
             int value = PyLong_AsLong(v);
-            Matrix61c_set_value(self, PyTuple_Pack(row, col, value));
+            set(self->mat, row, col, value);
         } else {
             double value = PyLong_AsLong(v);
-            Matrix61c_set_value(self, PyTuple_Pack(row, col, value));
+            set(self->mat, row, col, value);
         }
         return 0;
     }
