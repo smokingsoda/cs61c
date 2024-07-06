@@ -71,7 +71,7 @@ long long int sum_simd(int vals[NUM_ELEMS]) {
 		}
 		int inner_sum_array[4];
 		_mm_storeu_si128((__m128i*)inner_sum_array, inner_sum);
-		result = inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
+		result = result + inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
 		for (unsigned int i = NUM_ELEMS / 4 * 4; i < NUM_ELEMS; i++) {
 			if (vals[i] >= 128) {
 				result = result + vals[i];
@@ -111,7 +111,7 @@ long long int sum_simd_unrolled(int vals[NUM_ELEMS]) {
 		}
 		int inner_sum_array[4];
 		_mm_storeu_si128((__m128i*)inner_sum_array, inner_sum);
-		result = inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
+		result = result + inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
 		for (unsigned int i = NUM_ELEMS / 16 * 16; i < NUM_ELEMS; i++) {
 			if (vals[i] >= 128) {
 				result = result + vals[i];
