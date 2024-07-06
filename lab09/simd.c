@@ -65,7 +65,7 @@ long long int sum_simd(int vals[NUM_ELEMS]) {
 		__m128i inner_sum = _mm_setzero_si128();
 		for (unsigned int i = 0; i < NUM_ELEMS; i += 4) {
 			__m128i elements = _mm_loadu_si128((__m128i*)(vals + i));
-			__m128i and_flag = _mm_cmpgt_epi32(_127, elements);
+			__m128i and_flag = _mm_cmpgt_epi32(_127, elements); // vals[i] >= 128, but it is a signed compare
 			elements = _mm_and_si128(and_flag, elements);
 			inner_sum = _mm_add_epi32(inner_sum, elements);
 		}
@@ -91,16 +91,28 @@ long long int sum_simd_unrolled(int vals[NUM_ELEMS]) {
 		/* COPY AND PASTE YOUR sum_simd() HERE */
 		/* MODIFY IT BY UNROLLING IT */
 		__m128i inner_sum = _mm_setzero_si128();
-		for (unsigned int i = 0; i < NUM_ELEMS; i += 4) {
-			__m128i elements = _mm_loadu_si128((__m128i*)(vals + i));
-			__m128i and_flag = _mm_cmpgt_epi32(elements, _127);
-			elements = _mm_and_si128(and_flag, elements);
-			inner_sum = _mm_add_epi32(inner_sum, elements);
+		for (unsigned int i = 0; i < NUM_ELEMS; i += 16) {
+			__m128i elements0 = _mm_loadu_si128((__m128i*)(vals + i + 0));
+			__m128i elements1 = _mm_loadu_si128((__m128i*)(vals + i + 4));
+			__m128i elements2 = _mm_loadu_si128((__m128i*)(vals + i + 8));
+			__m128i elements3 = _mm_loadu_si128((__m128i*)(vals + i + 12));
+			__m128i and_flag0 = _mm_cmpgt_epi32(_127, elements0);
+			__m128i and_flag1 = _mm_cmpgt_epi32(_127, elements1);
+			__m128i and_flag2 = _mm_cmpgt_epi32(_127, elements2);
+			__m128i and_flag3 = _mm_cmpgt_epi32(_127, elements3);
+			elements0 = _mm_and_si128(and_flag0, elements0);
+			elements1 = _mm_and_si128(and_flag1, elements1);
+			elements2 = _mm_and_si128(and_flag2, elements2);
+			elements3 = _mm_and_si128(and_flag3, elements3);
+			inner_sum = _mm_add_epi32(inner_sum, elements0);
+			inner_sum = _mm_add_epi32(inner_sum, elements1);
+			inner_sum = _mm_add_epi32(inner_sum, elements2);
+			inner_sum = _mm_add_epi32(inner_sum, elements3);
 		}
 		int inner_sum_array[4];
 		_mm_storeu_si128((__m128i*)inner_sum_array, inner_sum);
 		result = inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
-		for (unsigned int i = NUM_ELEMS / 4 * 4; i < NUM_ELEMS; i++) {
+		for (unsigned int i = NUM_ELEMS / 16 * 16; i < NUM_ELEMS; i++) {
 			if (vals[i] >= 128) {
 				result = result + vals[i];
 			}
