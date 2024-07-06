@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <x86intrin.h>
 #include "simd.h"
+//__m128 _mm_div_ps(__m128 a, __m128 b); 
+//Four floating point divisions in single precision (i.e. float
+
+//__m128i _mm_max_epi8(__m128i a, __m128i b);
+//Sixteen max operations over signed 8-bit integers (i.e. char)
+
+//__m128i _mm_srai_epi16(__m128i a, int imm8);
+//Arithmetic shift right of eight signed 16-bit integers (i.e. short)
 
 long long int sum(int vals[NUM_ELEMS]) {
 	clock_t start = clock();
@@ -53,9 +61,22 @@ long long int sum_simd(int vals[NUM_ELEMS]) {
 	
 	for(unsigned int w = 0; w < OUTER_ITERATIONS; w++) {
 		/* YOUR CODE GOES HERE */
-
 		/* You'll need a tail case. */
-
+		_m128i inner_sum = _mm_setzero_si128();
+		for (unsigned int i = 0; i < NUM_ELEMS; i += 4) {
+			_m128i elements = _mm_loadu_si128(val + i);
+			_m128i and_flag = _mm_cmpgt_epi32(elements, _127);
+			elements = _mm_and_si128(and_flag, elements);
+			inner_sum = _mm_add_epi32(inner_sum + elements);
+		}
+		int inner_sum_array[4];
+		_mm_storeu_si128(inner_sum_array, inner_sum_array)
+		result = inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
+		for (unsigned int i = NUM_ELEMS / 4 * 4; i < NUM_ELEMS; i++) {
+			if (val[i] >= 128) {
+				result = result + val[i];
+			}
+		}
 	}
 	clock_t end = clock();
 	printf("Time taken: %Lf s\n", (long double)(end - start) / CLOCKS_PER_SEC);
@@ -69,7 +90,21 @@ long long int sum_simd_unrolled(int vals[NUM_ELEMS]) {
 	for(unsigned int w = 0; w < OUTER_ITERATIONS; w++) {
 		/* COPY AND PASTE YOUR sum_simd() HERE */
 		/* MODIFY IT BY UNROLLING IT */
-
+		_m128i inner_sum = _mm_setzero_si128();
+		for (unsigned int i = 0; i < NUM_ELEMS; i += 4) {
+			_m128i elements = _mm_loadu_si128(val + i);
+			_m128i and_flag = _mm_cmpgt_epi32(elements, _127);
+			elements = _mm_and_si128(and_flag, elements);
+			inner_sum = _mm_add_epi32(inner_sum + elements);
+		}
+		int inner_sum_array[4];
+		_mm_storeu_si128(inner_sum_array, inner_sum_array)
+		result = inner_sum_array[0] + inner_sum_array[1] + inner_sum_array[2] + inner_sum_array[3];
+		for (unsigned int i = NUM_ELEMS / 4 * 4; i < NUM_ELEMS; i++) {
+			if (val[i] >= 128) {
+				result = result + val[i];
+			}
+		}
 		/* You'll need 1 or maybe 2 tail cases here. */
 
 	}
