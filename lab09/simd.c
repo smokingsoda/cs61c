@@ -66,7 +66,7 @@ long long int sum_simd(int vals[NUM_ELEMS]) {
 		__m128i elements;
 		__m128i and_flag;
 		int inner_sum_array[4] = {0, 0, 0, 0};
-		for (unsigned int i = 0; i < NUM_ELEMS; i += 4) {
+		for (unsigned int i = 0; i < NUM_ELEMS / 4 * 4; i += 4) {
 			elements = _mm_loadu_si128((__m128i*)(vals + i));
 			and_flag = _mm_cmpgt_epi32(elements, _127);
 			elements = _mm_and_si128(and_flag, elements);
@@ -105,9 +105,9 @@ long long int sum_simd_unrolled(int vals[NUM_ELEMS]) {
 		int inner_sum_array[4] = {0, 0, 0, 0};
 		for (unsigned int i = 0; i < NUM_ELEMS; i += 16) {
 			elements0 = _mm_loadu_si128((__m128i*)(vals + i));
-			elements1 = _mm_loadu_si128((__m128i*)(vals + i + 1));
-			elements2 = _mm_loadu_si128((__m128i*)(vals + i + 2));
-			elements3 = _mm_loadu_si128((__m128i*)(vals + i + 3));
+			elements1 = _mm_loadu_si128((__m128i*)(vals + i + 4));
+			elements2 = _mm_loadu_si128((__m128i*)(vals + i + 8));
+			elements3 = _mm_loadu_si128((__m128i*)(vals + i + 12));
 			and_flag0 = _mm_cmpgt_epi32(elements0, _127);
 			and_flag1 = _mm_cmpgt_epi32(elements1, _127);
 			and_flag2 = _mm_cmpgt_epi32(elements2, _127);
