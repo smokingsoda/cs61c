@@ -101,7 +101,7 @@ long long int sum_simd_unrolled(int vals[NUM_ELEMS]) {
 		__m128i and_flag1;
 		__m128i and_flag2;
 		__m128i and_flag3;
-		int inner_sum_array{0, 0, 0, 0};
+		int inner_sum_array[4] = {0, 0, 0, 0};
 		for (unsigned int i = 0; i < NUM_ELEMS; i += 16) {
 			elements0 = _mm_loadu_si128((__m128i*)(vals + i + 0 ));
 			elements1 = _mm_loadu_si128((__m128i*)(vals + i + 4 * i));
