@@ -50,6 +50,7 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
   // TODO: Modify this function
   // Do NOT use the `for` directive here!
   int num_thread = omp_get_num_threads();
+  printf("Num of threads is: %d\n", num_thread);
   int chunck_size = ARRAY_SIZE / num_thread;
   printf("Chunck size is: %d\n", chunck_size);
   int indicator;
