@@ -10,10 +10,10 @@
 
 #include "libbmp/libbmp.h"
 
-#define REPEAT 60
+#define REPEAT 1
 #define BUF_SIZE 8192
 
-#define ARRAY_SIZE 5000000
+#define ARRAY_SIZE 100
 
 // for web server
 char *compute_dotp(int);
