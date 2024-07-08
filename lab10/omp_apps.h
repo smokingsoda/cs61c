@@ -10,7 +10,7 @@
 
 #include "libbmp/libbmp.h"
 
-#define REPEAT 1
+#define REPEAT 10
 #define BUF_SIZE 8192
 
 #define ARRAY_SIZE 100
