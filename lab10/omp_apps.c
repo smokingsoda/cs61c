@@ -34,11 +34,11 @@ void v_add_naive(double* x, double* y, double* z) {
 // Adjacent Method
 void v_add_optimized_adjacent(double* x, double* y, double* z) {
   // TODO: Modify this function
-  int num_thread = omp_get_num_threads();
-  printf("Num of threads is: %d\n", num_thread);
   // Do NOT use the `for` directive here!
   #pragma omp parallel
   {
+    int num_thread = omp_get_num_threads(); //Must be put inside the #pragma
+    printf("Num of threads is: %d\n", num_thread);
     int thread_index = omp_get_thread_num();
     for(int i = thread_index; i<ARRAY_SIZE; i+=num_thread) {
         z[i] = x[i] + y[i];
@@ -50,13 +50,14 @@ void v_add_optimized_adjacent(double* x, double* y, double* z) {
 void v_add_optimized_chunks(double* x, double* y, double* z) {
   // TODO: Modify this function
   // Do NOT use the `for` directive here!
-  int num_thread = omp_get_num_threads();
-  printf("Num of threads is: %d\n", num_thread);
-  int chunck_size = ARRAY_SIZE / num_thread;
-  printf("Chunck size is: %d\n", chunck_size);
-  int indicator;
+
   #pragma omp parallel
   {
+    int num_thread = omp_get_num_threads();
+    printf("Num of threads is: %d\n", num_thread);
+    int chunck_size = ARRAY_SIZE / num_thread;
+    printf("Chunck size is: %d\n", chunck_size);
+    int indicator;
     int thread_index = omp_get_thread_num();
     for (int i = chunck_size * thread_index; i < chunck_size * (thread_index + 1); i++) {
       z[i] = x[i] + y[i];
