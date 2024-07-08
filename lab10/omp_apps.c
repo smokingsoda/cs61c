@@ -65,10 +65,13 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
         indicator = i;
       }
     }
+    printf("Integer i is: %d\n", indicator);
+    if (num_thread - 1 = thread_index) {
+    for (int i = (ARRAY_SIZE / num_thread) * num_thread; i < ARRAY_SIZE; i++) {
+      z[i] = x[i] + y[i];
+    }
   }
-  printf("Integer i is: %d\n", indicator);
-  for (int i = (ARRAY_SIZE / num_thread) * num_thread; i < ARRAY_SIZE; i++) {
-    z[i] = x[i] + y[i];
+    
   }
 }
 // END PART 1 EX 2
