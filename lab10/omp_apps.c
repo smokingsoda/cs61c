@@ -58,7 +58,10 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
       int id = omp_get_thread_num();
       if (i < (id + 1) * (i / num) && i >= (id) * (i / num)) {
         z[i] = x[i] + y[i];
+      } else if (num - 1 == id) {
+        z[i] = x[i] + y[i];
       }
+      
     }
   }
 }
