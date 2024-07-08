@@ -61,9 +61,7 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
     int thread_index = omp_get_thread_num();
     for (int i = chunck_size * thread_index; i < chunck_size * (thread_index + 1); i++) {
       z[i] = x[i] + y[i];
-      if (num_thread - 1 == thread_index) {
-        indicator = i;
-      }
+      indicator = i;
     }
     printf("Thread %d\n give Integer i is: %d\n", thread_index, indicator);
     if (num_thread - 1 == thread_index) {
