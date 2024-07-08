@@ -35,6 +35,7 @@ void v_add_naive(double* x, double* y, double* z) {
 void v_add_optimized_adjacent(double* x, double* y, double* z) {
   // TODO: Modify this function
   int num_thread = omp_get_num_threads();
+  printf("Num of threads is: %d\n", num_thread);
   // Do NOT use the `for` directive here!
   #pragma omp parallel
   {
