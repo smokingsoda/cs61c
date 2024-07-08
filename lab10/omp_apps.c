@@ -90,8 +90,8 @@ double dotp_manual_optimized(double* x, double* y, int arr_size) {
   {
     int num = omp_get_num_threads();
     double sum[num];
-    #pragma omp for
     int id = omp_get_thread_num();
+    #pragma omp for
     for (int i = 0; i < arr_size; i++) {
       sum[id] += x[i] * y[i];
     }
@@ -114,8 +114,8 @@ double dotp_reduction_optimized(double* x, double* y, int arr_size) {
   {
     int num = omp_get_num_threads();
     double sum[num];
-    #pragma omp for
     int id = omp_get_thread_num();
+    #pragma omp for
     for (int i = 0; i < arr_size; i++) {
       sum[id] += x[i] * y[i];
     }
