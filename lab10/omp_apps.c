@@ -38,11 +38,12 @@ void v_add_optimized_adjacent(double* x, double* y, double* z) {
   // Do NOT use the `for` directive here!
   #pragma omp parallel
   {
-    for(int i=0; i<ARRAY_SIZE; i++)
+    for(int i=0; i<ARRAY_SIZE; i++) {
       int id = omp_get_thread_num();
       if (i % num == id) {
         z[i] = x[i] + y[i];
       }
+    }
   }
 }
 
@@ -53,10 +54,11 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
   int num = omp_get_num_threads();
   #pragma omp parallel
   {
-    for(int i=0; i<ARRAY_SIZE; i++)
-    int id = omp_get_thread_num();
-    if (i < (id + 1) * (i / num) && i >= (id) * (i / num)) {
-      z[i] = x[i] + y[i];
+    for(int i=0; i<ARRAY_SIZE; i++) {
+      int id = omp_get_thread_num();
+      if (i < (id + 1) * (i / num) && i >= (id) * (i / num)) {
+        z[i] = x[i] + y[i];
+      }
     }
   }
 }
@@ -69,7 +71,7 @@ double dotp_naive(double* x, double* y, int arr_size) {
 #pragma omp parallel
   {
     #pragma omp for
-    for (int i = 0; i < arr_size; i++)
+    for (int i = 0; i < arr_size; i++) 
       #pragma omp critical
       global_sum += x[i] * y[i];
   }
