@@ -66,7 +66,7 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
       }
     }
     printf("Integer i is: %d\n", indicator);
-    if (num_thread - 1 = thread_index) {
+    if (num_thread - 1 == thread_index) {
     for (int i = (ARRAY_SIZE / num_thread) * num_thread; i < ARRAY_SIZE; i++) {
       z[i] = x[i] + y[i];
     }
