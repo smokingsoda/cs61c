@@ -51,6 +51,7 @@ void v_add_optimized_chunks(double* x, double* y, double* z) {
   // Do NOT use the `for` directive here!
   int num_thread = omp_get_num_threads();
   int chunck_size = ARRAY_SIZE / num_thread;
+  printf("Chunck size is: %d\n", chunck_size);
   int indicator;
   #pragma omp parallel
   {
