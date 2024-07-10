@@ -188,12 +188,12 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int boundary = cols / 4 * 4
+    int boundary = cols / 4 * 4;
     __m256d result_element;
     __m256d mat1_element;
     __m256d mat2_element; //256 bit can contain 4 double
     #pragma omp parallel for collapse(2)
-        for (int i = 0; i < result->rows; i++) {
+        for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=4) {
                 mat1_element = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat2_element = _mm256_loadu_pd(&(mat2->data[i][j]));
