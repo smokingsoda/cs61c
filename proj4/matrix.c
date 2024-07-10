@@ -313,7 +313,11 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = 0; i < new_row; ++i) {
         for (int j = col_boundary; j < new_col; ++j) {
             for (int k = 0; k < middle; k++) {
-                (*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
+                if (k == 0) {
+                    result[i][j] = mat1->data[i][k] * mat2->data[k][j];
+                } else {
+                    (*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));  
+                }
             }
         }
     }
@@ -360,14 +364,14 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         }
     }
     if (pow % 2 == 1) {
-        for (int m = 0; m < mid1->rows; ++m) {
-            for (int n = 0; n < mid1->cols; ++n) {
+        for (int m = 0; m < mid2->rows; ++m) {
+            for (int n = 0; n < mid2->cols; ++n) {
                 result->data[m][n] = mid2->data[m][n];
             }
         }
     } else {
-        for (int m = 0; m < mid2->rows; ++m) {
-            for (int n = 0; n < mid2->cols; ++n) {
+        for (int m = 0; m < mid1->rows; ++m) {
+            for (int n = 0; n < mid1->cols; ++n) {
                 result->data[m][n] = mid1->data[m][n];
             }
         }
