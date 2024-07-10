@@ -346,10 +346,14 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     if (flag != 0) {
         return -2;
     }
+    int rows = mat->rows;
+    int cols = mat->cols;
+    int boundary = mat->cols / 4 * 4
+    __mm256d element;
     for (int i = 0; i <= pow; ++i) {
         if (i == 0) {
-            for (int m = 0; m < mat->rows; ++m) {
-                for (int n = 0; n < mat->cols; ++n) {
+            for (int m = 0; m < rows; ++m) {
+                for (int n = 0; n < cols; ++n) {
                     if (m == n) {
                         mid1->data[m][n] = 1;
                     } else {
@@ -364,14 +368,26 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         }
     }
     if (pow % 2 == 1) {
-        for (int m = 0; m < mid2->rows; ++m) {
-            for (int n = 0; n < mid2->cols; ++n) {
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < boundary; n += 4) {
+                element = _mm256_loadu_pd(&(mid2->data[m][n]));
+                _mm256d_storeu_pd(&(result->data[m][n]))
+            }
+        }
+        for (int m = 0; m < rows; m++) {
+            for (int n = boundary; n < cols; n++) {
                 result->data[m][n] = mid2->data[m][n];
             }
         }
     } else {
-        for (int m = 0; m < mid1->rows; ++m) {
-            for (int n = 0; n < mid1->cols; ++n) {
+        for (int m = 0; m < rows; m++) {
+            for (int n = 0; n < boundary; n += 4) {
+                element = _mm256_loadu_pd(&(mid1->data[m][n]));
+                _mm256d_storeu_pd(&(result->data[m][n]))
+            }
+        }
+        for (int m = 0; m < rows; m++) {
+            for (int n = boundary; n < cols; n++) {
                 result->data[m][n] = mid1->data[m][n];
             }
         }
