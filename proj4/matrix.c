@@ -205,22 +205,22 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 mat2_element2 = _mm256_loadu_pd(&(mat2->data[i][j + 8]));
                 mat2_element3 = _mm256_loadu_pd(&(mat2->data[i][j + 12]));
 
-                result_element0 = _mm256_sub_pd(mat1_element0, mat2_element0);
-                result_element1 = _mm256_sub_pd(mat1_element1, mat2_element1);
-                result_element2 = _mm256_sub_pd(mat1_element2, mat2_element2);
-                result_element3 = _mm256_sub_pd(mat1_element3, mat2_element3);
+                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
+                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
+                result_element2 = _mm256_add_pd(mat1_element2, mat2_element2);
+                result_element3 = _mm256_add_pd(mat1_element3, mat2_element3);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
                 _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
                 _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
-                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
+                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
         }
     #pragma omp parallel for collapse(2)
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
-            result->data[i][j] = mat1->data[i][j] - mat2->data[i][j];
+            result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
         }
     }
     return 0;
@@ -254,22 +254,22 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 mat2_element2 = _mm256_loadu_pd(&(mat2->data[i][j + 8]));
                 mat2_element3 = _mm256_loadu_pd(&(mat2->data[i][j + 12]));
 
-                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
-                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
-                result_element2 = _mm256_add_pd(mat1_element2, mat2_element2);
-                result_element3 = _mm256_add_pd(mat1_element3, mat2_element3);
+                result_element0 = _mm256_sub_pd(mat1_element0, mat2_element0);
+                result_element1 = _mm256_sub_pd(mat1_element1, mat2_element1);
+                result_element2 = _mm256_sub_pd(mat1_element2, mat2_element2);
+                result_element3 = _mm256_sub_pd(mat1_element3, mat2_element3);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
                 _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
                 _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
-                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
+                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
     #pragma omp parallel for collapse(2)
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
-            result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
+            result->data[i][j] = mat1->data[i][j] - mat2->data[i][j];
         }
     }
     return 0;
