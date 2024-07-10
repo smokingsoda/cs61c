@@ -3,6 +3,7 @@ from unittest import TestCase
 small = 10
 medium = 100
 large = 1000
+pow_times = 10
 """
 For each operation, you should write tests to test  on matrices of different sizes.
 Hint: use dp_mc_matrix to generate dumbpy and numc matrices with the same data and use
@@ -132,21 +133,21 @@ class TestPow(TestCase):
     def test_small_pow(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(small, small, seed=0)
-        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        is_correct, speed_up = compute([dp_mat, pow_times], [nc_mat, pow_times], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
     def test_medium_pow(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(medium, medium, seed=0)
-        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        is_correct, speed_up = compute([dp_mat, pow_times], [nc_mat, pow_times], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
     def test_large_pow(self):
         # TODO: YOUR CODE HERE
         dp_mat, nc_mat = rand_dp_nc_matrix(large, large, seed=0)
-        is_correct, speed_up = compute([dp_mat, 3], [nc_mat, 3], "pow")
+        is_correct, speed_up = compute([dp_mat, pow_times], [nc_mat, pow_times], "pow")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
