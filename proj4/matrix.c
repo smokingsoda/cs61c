@@ -220,7 +220,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel for collapse(2)
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
-            result->data[i][j] = mat1->data[i][j];
+            result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
         }
     }
     return 0;
