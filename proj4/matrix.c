@@ -194,7 +194,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             mat1_element = _mm256_loadu_pd(&(mat1->data[i][j]));
             mat2_element = _mm256_loadu_pd(&(mat2->data[i][j]));
             result_element = _mm256_add_pd(mat1_element, mat2_element);
-            _mm256_storeu_pd(&(result->data[i][j]), result_element);
+            _mm256_storeu_pd((__m256d*)&(result->data[i][j]), result_element);
             //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
         }
         for (int j = result->cols / 4 * 4; j < result->cols; j++) {
