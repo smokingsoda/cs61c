@@ -294,7 +294,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat2_element;
     int col_boundary = new_col / 4 * 4;
     for (int k = 0; k < middle; k++) {
-        for (int i = 0; i < new_row; k++) {
+        for (int i = 0; i < new_row; i++) {
             for (int j = 0; j < col_boundary; j += 4) {
                 if (k == 0) {
                     result_element = _mm256_setzero_pd();
