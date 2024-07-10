@@ -349,7 +349,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     int rows = mat->rows;
     int cols = mat->cols;
     int boundary = mat->cols / 4 * 4;
-    __mm256d element;
+    __m256d element;
     for (int i = 0; i <= pow; ++i) {
         if (i == 0) {
             for (int m = 0; m < rows; ++m) {
