@@ -399,13 +399,60 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     /* TODO: YOUR CODE HERE */
-    for (int i = 0; i < mat->rows; ++i) {
-        for (int j = 0; j < mat->cols; ++j) {
-            if (mat->data[i][j] >= 0) {
-                result->data[i][j]= mat->data[i][j];
-            } else {
-                result->data[i][j]= 0 - mat->data[i][j];;
+    if (result->rows != mat->rows || result->cols != mat->cols) {
+        return -1;
+    }
+    int rows = result->rows;
+    int cols = result->cols;
+    int boundary = cols / 16 * 16;
+    __m256d result_element0, result_element1, result_element2, result_element3;
+    __m256d mat_element0, mat_element1, mat_element2, mat_element3;
+    __m256d positive_flag0, positive_flag1, positive_flag2, positive_flag3;
+    __m256d mask0, mask1, mask2, mask3;
+    __m256d _neg = _mm256_set1_pd(-0.0);
+    __m256d _zero = _mm256_set_pd(0.0);
+    #pragma omp parallel for collapse(2)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < boundary; j+=16) {
+                
+                mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
+                mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
+                mat_element2 = _mm256_loadu_pd(&(mat->data[i][j + 8]));
+                mat_element3 = _mm256_loadu_pd(&(mat->data[i][j + 12]));
+
+                //if is less than, then return ones, else return zeros
+                mask0 = _mm256_cmp_pd(mat_element0, _zero, _CMP_LT_OQ);
+                mask1 = _mm256_cmp_pd(mat_element1, _zero, _CMP_LT_OQ);
+                mask2 = _mm256_cmp_pd(mat_element2, _zero, _CMP_LT_OQ);
+                mask3 = _mm256_cmp_pd(mat_element3, _zero, _CMP_LT_OQ);
+
+                //if mask is 1, then second, else first
+                positive_flag0 = _mm256_blendv_pd(_zero, _neg, mask0);
+                positive_flag1 = _mm256_blendv_pd(_zero, _neg, mask1);
+                positive_flag2 = _mm256_blendv_pd(_zero, _neg, mask2);
+                positive_flag3 = _mm256_blendv_pd(_zero, _neg, mask3);
+
+                result_element0 = _mm256_xor_pd(mat_element0, positive_flag0);
+                result_element1 = _mm256_xor_pd(mat_element1, positive_flag1);
+                result_element2 = _mm256_xor_pd(mat_element2, positive_flag2);
+                result_element3 = _mm256_xor_pd(mat_element3, positive_flag3);
+
+                _mm256_storeu_pd(&(result->data[i][j]), result_element0);
+                _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
+                _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
+                _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
+                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
+        }
+    #pragma omp parallel for collapse(2)
+    for (int i = 0; i < rows; i++) {
+        for (int j = boundary; j < cols; j++) {
+            if (mat->data[i][j] < 0) {
+                result->data[i][j] = - mat->data[i][j];
+            } else {
+                result->data[i][j] = mat->data[i][j]
+            }
+
         }
     }
     return 0;
