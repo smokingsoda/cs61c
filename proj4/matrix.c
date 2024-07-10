@@ -199,7 +199,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
             for (int j = result->cols / 4 * 4; j < result->cols; j++) {
-            r   esult->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
+                result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
             }
         }
     return 0;
