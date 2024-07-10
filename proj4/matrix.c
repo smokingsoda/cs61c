@@ -189,7 +189,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d result_element;
     __m256d mat1_element;
     __m256d mat2_element; //256 bit can contain 4 double
-    #pragma omp parallel for
+    #pragma omp parallel for collapse(2)
         for (int i = 0; i < result->rows; i++) {
             for (int j = 0; j < result->cols / 4 * 4; j+=4) {
                 mat1_element = _mm256_loadu_pd(&(mat1->data[i][j]));
