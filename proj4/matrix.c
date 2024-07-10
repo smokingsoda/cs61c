@@ -383,7 +383,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < boundary; n += 4) {
                 element = _mm256_loadu_pd(&(mid1->data[m][n]));
-                _mm256d_storeu_pd(&(result->data[m][n]));
+                _mm256_storeu_pd(&(result->data[m][n]));
             }
         }
         for (int m = 0; m < rows; m++) {
