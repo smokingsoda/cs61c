@@ -286,14 +286,37 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->cols != mat2->rows || result->rows != mat1->rows || result->cols != mat2->cols) {
         return -1;
     }
-    for (int i = 0; i < mat1->rows; ++i) {
-        for (int j = 0; j < mat2->cols; ++j) {
-            *(*(result->data + i) + j) = 0;
-            for (int k = 0; k < mat1->cols; ++k) {
+    int new_row = mat1->rows;
+    int new_col = mat2->cols;
+    int middle = mat1->cols;
+    __m256d result_element;
+    __m256d mat1_element;
+    __m256d mat2_element;
+    //int row_boundary = new_row / 4 * 4;
+    //int col_boundary = new_col / 4 * 4;
+    int middle_boundary = middle / 4 * 4;
+    for (int i = 0; i < new_row; ++i) {
+        for (int j = 0; j < new_col; ++j) {
+            result_element = _mm256_setzero_pd();
+            for (int k = 0; k < middle_boundary; k += 4) {
+                mat1_element = _mm256_loadu_pd(&(mat1->data[i][k]));
+                mat2_element = _mm256_loadu_pd(&(mat2->data[k][j]));
+                result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
+                //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
+            }
+            _mm256_storeu_pd(&(result->data[i][j]), result_element);
+        }
+    }
+
+    for (int i = 0; i < new_row; ++i) {
+        for (int j = 0; j < new_col; ++j) {
+            result_element = _mm256_setzero_pd();
+            for (int k = middle_boundary; k < middle; k++) {
                 (*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
         }
     }
+
     return 0;
 }
 
