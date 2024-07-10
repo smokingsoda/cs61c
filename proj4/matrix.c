@@ -410,7 +410,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     __m256d positive_flag0, positive_flag1, positive_flag2, positive_flag3;
     __m256d mask0, mask1, mask2, mask3;
     __m256d _neg = _mm256_set1_pd(-0.0);
-    __m256d _zero = _mm256_set_pd(0.0);
+    __m256d _zero = _mm256_set1_pd(0.0);
     #pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
@@ -450,7 +450,7 @@ int abs_matrix(matrix *result, matrix *mat) {
             if (mat->data[i][j] < 0) {
                 result->data[i][j] = - mat->data[i][j];
             } else {
-                result->data[i][j] = mat->data[i][j]
+                result->data[i][j] = mat->data[i][j];
             }
 
         }
