@@ -363,7 +363,7 @@ int neg_matrix(matrix *result, matrix *mat) {
     int boundary = cols / 16 * 16;
     __m256d result_element0, result_element1, result_element2, result_element3;
     __m256d mat_element0, mat_element1, mat_element2, mat_element3;
-    __m256d _neg = _mm256_set1_pd(0x8000000000000000);
+    __m256d _neg = _mm256_set1_pd(-0.0);
     #pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
