@@ -348,7 +348,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
     int rows = mat->rows;
     int cols = mat->cols;
-    int boundary = mat->cols / 4 * 4
+    int boundary = mat->cols / 4 * 4;
     __mm256d element;
     for (int i = 0; i <= pow; ++i) {
         if (i == 0) {
@@ -371,7 +371,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         for (int m = 0; m < rows; m++) {
             for (int n = 0; n < boundary; n += 4) {
                 element = _mm256_loadu_pd(&(mid2->data[m][n]));
-                _mm256d_storeu_pd(&(result->data[m][n]));
+                _mm256_storeu_pd(&(result->data[m][n]));
             }
         }
         for (int m = 0; m < rows; m++) {
