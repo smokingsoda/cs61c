@@ -218,9 +218,9 @@ int abs_matrix(matrix *result, matrix *mat)
         for (int i = 0; i < mat->rows; i++) {
             int index = i * mat->cols;
             if (mat->data[j + index] < 0) {
-                result->data[j + index] = -mat1->data[j + index];
+                result->data[j + index] = -mat->data[j + index];
             } else {
-                result->data[j + index] = mat1->data[j + index];
+                result->data[j + index] = mat->data[j + index];
             }
         }
         
@@ -245,8 +245,8 @@ int neg_matrix(matrix *result, matrix *mat)
             int index = i * mat->cols;
             result->data[j + index] = -mat->data[j + index];
         }
-        
     }
+    return 0;
 }
 
 /*
