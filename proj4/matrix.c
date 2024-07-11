@@ -202,17 +202,31 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 mat1_element0 = _mm256_load_pd((void*)&(mat1->data[i][j]));
                 mat1_element1 = _mm256_load_pd((void*)&(mat1->data[i][j + 4]));
 
+                _mm256_store_pd((void*)&(result->data[i][j]), mat1_element0);
+                _mm256_store_pd((void*)&(result->data[i][j + 4]), mat1_element1);
+                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
+            }
+        }
+
+        #pragma omp parallel for
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < boundary; j+=8) {
                 mat2_element0 = _mm256_load_pd((void*)&(mat2->data[i][j]));
                 mat2_element1 = _mm256_load_pd((void*)&(mat2->data[i][j + 4]));
 
-                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
-                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
+                result_element0 = _mm256_load_pd((void*)&(result->data[i][j]));
+                result_element1 = _mm256_load_pd((void*)&(result->data[i][j + 4]));
+
+                result_element0 = _mm256_add_pd(result_element0, mat2_element0);
+                result_element1 = _mm256_add_pd(result_element1, mat2_element1);
 
                 _mm256_store_pd((void*)&(result->data[i][j]), result_element0);
                 _mm256_store_pd((void*)&(result->data[i][j + 4]), result_element1);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
         }
+
+
     if (boundary != cols) {
         #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
