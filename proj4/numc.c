@@ -314,7 +314,9 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     } else if (flag == 0) {
         return (PyObject *) rv;
     } else {
-        PyErr_Format(PyExc_RuntimeError, "Memory allocation failed with flags: flag=%d", flag);
+        char error_msg[100];
+        snprintf(error_msg, sizeof(error_msg), "Memory allocation failed with flags: flag=", flag);
+        PyErr_SetString(PyExc_RuntimeError, error_msg);
         return NULL;
     }
 
