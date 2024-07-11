@@ -190,9 +190,9 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int rows = result->rows;
     int cols = result->cols;
     int boundary = cols / 8 * 8;
-    __m256d result_element0, result_element1, result_element2, result_element3;
-    __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
-    __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
+    __m512d result_element0, result_element1, result_element2, result_element3;
+    __m512d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
+    __m512d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
     //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=8) {
@@ -230,9 +230,9 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int rows = result->rows;
     int cols = result->cols;
     int boundary = cols / 16 * 16;
-    __m512d result_element0, result_element1, result_element2, result_element3;
-    __m512d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
-    __m512d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
+    __m256d result_element0, result_element1, result_element2, result_element3;
+    __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
+    __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
     //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
