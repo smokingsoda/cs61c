@@ -9,7 +9,7 @@ install: install_dumbpy
 	if [ ! -f numc_install.txt ]; then touch numc_install.txt; fi
 	rm -rf build
 	xargs rm -rf < numc_install.txt
-	python3 setup.py install --record numc_install.txt
+	python3 setup_dumbpy.py install --record numc_install.txt
 	echo .venv/lib/python$(PYTHON_VERSION)/site-packages/numc-* >> numc_install.txt
 
 uninstall:
