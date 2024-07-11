@@ -243,7 +243,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d result_element0, result_element1, result_element2, result_element3;
     __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
     __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
@@ -268,7 +268,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
             result->data[i][j] = mat1->data[i][j] - mat2->data[i][j];
@@ -413,7 +413,7 @@ int neg_matrix(matrix *result, matrix *mat) {
     __m256d result_element0, result_element1, result_element2, result_element3;
     __m256d mat_element0, mat_element1, mat_element2, mat_element3;
     __m256d _neg = _mm256_set1_pd(-0.0);
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
@@ -460,7 +460,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     __m256d mask0, mask1, mask2, mask3;
     __m256d _neg = _mm256_set1_pd(-0.0);
     __m256d _zero = _mm256_set1_pd(0.0);
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
                 
@@ -493,7 +493,7 @@ int abs_matrix(matrix *result, matrix *mat) {
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
             if (mat->data[i][j] < 0) {
