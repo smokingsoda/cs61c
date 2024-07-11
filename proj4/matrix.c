@@ -196,13 +196,13 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=4) {
-                mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
+                mat1_element0 = _mm256_load_pd(&(mat1->data[i][j]));
 
-                mat2_element0 = _mm256_loadu_pd(&(mat2->data[i][j]));
+                mat2_element0 = _mm256_load_pd(&(mat2->data[i][j]));
 
                 result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
 
-                _mm256_storeu_pd(&(result->data[i][j]), result_element0);
+                _mm256_store_pd(&(result->data[i][j]), result_element0);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
         }
