@@ -292,11 +292,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat1_element;
     __m256d mat2_element;
     int col_boundary = new_col / 4 * 4;
-    omp_set_num_threads(2);
     for (int k = 0; k < middle; k++) {
         for (int i = 0; i < new_row; i++) {
-            #pragma omp parallel for
-            for (int j = 0; j < col_boundary; j += 4) {
+            for (int j = loop_boundary * id; j < loop_boundary * (id + 1); j += 4) {
                 if (k == 0) {
                     result_element = _mm256_setzero_pd();
                 } else {
@@ -308,10 +306,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 _mm256_storeu_pd(&(result->data[i][j]), result_element);
                 //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
+            }
         }
     }
     for (int i = 0; i < new_row; ++i) {
-        #pragma omp parallel for
         for (int j = col_boundary; j < new_col; ++j) {
             for (int k = 0; k < middle; k++) {
                 if (k == 0) {
@@ -435,7 +433,7 @@ int neg_matrix(matrix *result, matrix *mat) {
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
-    #pragma omp parallel
+    #pragma omp parallel for
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
             result->data[i][j] = - mat->data[i][j];
@@ -467,7 +465,6 @@ int abs_matrix(matrix *result, matrix *mat) {
     #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=16) {
-                
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
                 mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
                 mat_element2 = _mm256_loadu_pd(&(mat->data[i][j + 8]));
@@ -497,7 +494,7 @@ int abs_matrix(matrix *result, matrix *mat) {
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
-    #pragma omp parallel
+    #pragma omp parallel for
     for (int i = 0; i < rows; i++) {
         for (int j = boundary; j < cols; j++) {
             if (mat->data[i][j] < 0) {
