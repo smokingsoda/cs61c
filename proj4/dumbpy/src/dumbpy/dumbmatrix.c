@@ -2,15 +2,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
-
-// Include SSE intrinsics
-#if defined(_MSC_VER)
-#include <intrin.h>
-#elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
-#include <immintrin.h>
-#include <x86intrin.h>
-#endif
 
 /* Below are some intel intrinsics that might be useful
  * void _mm256_storeu_pd (double * mem_addr, __m256d a)

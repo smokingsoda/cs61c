@@ -1,6 +1,5 @@
 CC = gcc
-CFLAGS = -g -O0 -Wall -std=c99 -fopenmp -mavx -mfma -pthread
-LDFLAGS = -fopenmp
+CFLAGS = -g -O0 -Wall -std=c99
 CUNIT = -lcunit
 PYTHON_VERSION = 3.10
 PYTHON = -lpython$(PYTHON_VERSION)
@@ -37,7 +36,7 @@ clean:
 
 test:
 	rm -f test
-	$(CC) $(CFLAGS) tests/mat_test.c src/matrix.c -o test $(LDFLAGS) $(CUNIT) $(PYTHON)
+	$(CC) $(CFLAGS) tests/mat_test.c src/matrix.c -o test $(CUNIT) $(PYTHON)
 	valgrind -s --tool=memcheck --leak-check=yes ./test
 
 .PHONY: test
