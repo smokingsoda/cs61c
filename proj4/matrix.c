@@ -70,7 +70,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -2;
     }
     for (int i = 0; i < rows; ++i) {
-        posix_memalign((void **)(*mat)->data[i], 32, cols * sizeof(double));
+        posix_memalign((void **)&((*mat)->data[i]), 32, cols * sizeof(double));
         //*((*mat)->data + i) = (double *) malloc(sizeof(double) * cols);
         for (int j = 0; j < cols; ++j) {
             *((*((*mat)->data + i)) + j) = 0;
