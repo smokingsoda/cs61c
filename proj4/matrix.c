@@ -195,9 +195,9 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int flag0, flag1, flag2;
     //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
-            flag0 = posix_memalign((void**)&result->data[i], 32, cols * sizeof(double));
-            flag1 = posix_memalign((void**)&mat1->data[i], 32, cols * sizeof(double));
-            flag2 = posix_memalign((void**)&mat2->data[i], 32, cols * sizeof(double));
+            flag0 = posix_memalign((void**)&(result->data[i]), 32, cols * sizeof(double));
+            flag1 = posix_memalign((void**)&(mat1->data[i]), 32, cols * sizeof(double));
+            flag2 = posix_memalign((void**)&(mat2->data[i]), 32, cols * sizeof(double));
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
