@@ -2,6 +2,15 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
+
+// Include SSE intrinsics
+#if defined(_MSC_VER)
+#include <intrin.h>
+#elif defined(__GNUC__) && (defined(__x86_64__) || defined(__i386__))
+#include <immintrin.h>
+#include <x86intrin.h>
+#endif
 
 /* Below are some intel intrinsics that might be useful
  * void _mm256_storeu_pd (double * mem_addr, __m256d a)
@@ -255,11 +264,13 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2)
     {
         return -1;
     }
-    for (int i = 0; i < mat1->rows * mat1->cols; i++)
-    {
-        result->data[i] = mat1->data[i] + mat2->data[i];
+    for (int j = 0; j < mat1->cols; j++) {
+        for (int i = 0; i < mat1->rows; i++) {
+            int index = i * mat1->cols;
+            result->data[j + index] = mat1->data[j + index] + mat2->data[j + index];
+        }
+        
     }
-
     
     return 0;
 }
