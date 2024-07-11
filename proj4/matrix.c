@@ -199,9 +199,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             flag1 = posix_memalign((void**)&mat1->data[i], 32, cols * sizeof(double));
             flag2 = posix_memalign((void**)&mat2->data[i], 32, cols * sizeof(double));
             if (flag0 != 0 || flag1 != 0 || flag2 != 0) {
-                fprintf(stderr, "posix_memalign failed with error code %d: %s\n", flag0, strerror(flag0));
-                fprintf(stderr, "posix_memalign failed with error code %d: %s\n", flag0, strerror(flag1));
-                fprintf(stderr, "posix_memalign failed with error code %d: %s\n", flag0, strerror(flag2));
+                PyErr_Format(PyExc_RuntimeError, "Memory allocation failed with flags: flag0=%d, flag1=%d, flag2=%d", flag0, flag1, flag2);
                 return -2;
             }
             for (int j = 0; j < boundary; j+=16) {
