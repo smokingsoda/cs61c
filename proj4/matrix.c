@@ -295,7 +295,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     omp_set_num_threads(2);
     for (int k = 0; k < middle; k++) {
         for (int i = 0; i < new_row; i++) {
-            #pragma omp parallel
+            #pragma omp parallel for
             for (int j = 0; j < col_boundary; j += 4) {
                 if (k == 0) {
                     result_element = _mm256_setzero_pd();
@@ -311,7 +311,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     for (int i = 0; i < new_row; ++i) {
-        #pragma omp parallel
+        #pragma omp parallel for
         for (int j = col_boundary; j < new_col; ++j) {
             for (int k = 0; k < middle; k++) {
                 if (k == 0) {
