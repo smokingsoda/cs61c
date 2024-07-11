@@ -311,15 +311,8 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     if (flag == -1) {
         PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
         return NULL;
-    } else if (flag == 0) {
-        return (PyObject *) rv;
-    } else {
-        char error_msg[100];
-        snprintf(error_msg, sizeof(error_msg), "Memory allocation failed with flags: flag=", flag);
-        PyErr_SetString(PyExc_RuntimeError, error_msg);
-        return NULL;
     }
-
+    return (PyObject *) rv;
 }
 
 /*
