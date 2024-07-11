@@ -326,9 +326,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
                     _mm256_storeu_pd(&(result->data[i][j]), result_element);
                     //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
-            }
-            }
+                    }
+                }
             
+            }
         }
         }
     }
