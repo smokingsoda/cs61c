@@ -193,14 +193,19 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
     __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
     int flag0, flag1, flag2;
+    double *old_result, *old_mat1, *old_mat2;
     //#pragma omp parallel for collapse(2)
         for (int i = 0; i < rows; i++) {
-            flag0 = posix_memalign((void**)&result->data[i], 32, cols * sizeof(double));
-            flag1 = posix_memalign((void**)&mat1->data[i], 32, cols * sizeof(double));
-            flag2 = posix_memalign((void**)&mat2->data[i], 32, cols * sizeof(double));
-            if (flag0 != 0 || flag1 != 0 || flag2 != 0) {
-                return flag0;
-            }
+            old_result = result->data[i];
+            old_mat1 = mat1->data[i];
+            old_mat2 = mat2->data[i];
+            posix_memalign((void**)&result->data[i], 32, cols * sizeof(double));
+            posix_memalign((void**)&mat1->data[i], 32, cols * sizeof(double));
+            posix_memalign((void**)&mat2->data[i], 32, cols * sizeof(double));
+
+            memcpy(result->data[i], old_result, cols * sizeof(double));
+            memcpy(mat1->data[i], old_mat1, cols * sizeof(double));
+            memcpy(mat2->data[i], old_mat2, cols * sizeof(double));
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
