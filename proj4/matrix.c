@@ -292,8 +292,15 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat1_element;
     __m256d mat2_element;
     int col_boundary = new_col / 4 * 4;
+    omp_set_num_threads(2);
     for (int k = 0; k < middle; k++) {
-        for (int i = 0; i < new_row; i++) {
+        #pragma omp parallel
+        {
+        int num = omp_get_num_threads();
+        int id = omp_get_thread_num();
+        int chunck_size = new_row / num;
+        
+        for (int i = id * chunck_size; i < (id + 1) * chunck_size; i++) {
             for (int j = 0; j < col_boundary; j += 4) {
                 if (k == 0) {
                     result_element = _mm256_setzero_pd();
@@ -306,6 +313,23 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 _mm256_storeu_pd(&(result->data[i][j]), result_element);
                 //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
+            if (id = num - 1) {
+            for (int i = chunck_size * num; i < new_row; i++) {
+                for (int j = 0; j < col_boundary; j += 4) {
+                    if (k == 0) {
+                        result_element = _mm256_setzero_pd();
+                    } else {
+                        result_element = _mm256_loadu_pd(&(result->data[i][j]));
+                    }
+                    mat1_element = _mm256_set1_pd(mat1->data[i][k]);
+                    mat2_element = _mm256_loadu_pd(&(mat2->data[k][j]));
+                    result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
+                    _mm256_storeu_pd(&(result->data[i][j]), result_element);
+                    //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
+            }
+            }
+            
+        }
         }
     }
     for (int i = 0; i < new_row; ++i) {
