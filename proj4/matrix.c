@@ -198,9 +198,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             flag0 = posix_memalign((void**)&result->data[i], 32, cols * sizeof(double));
             flag1 = posix_memalign((void**)&mat1->data[i], 32, cols * sizeof(double));
             flag2 = posix_memalign((void**)&mat2->data[i], 32, cols * sizeof(double));
-            if (flag0 != 0 || flag1 != 0 || flag2 != 0) {
-                return -1;
-            }
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
