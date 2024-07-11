@@ -311,8 +311,9 @@ PyObject *Matrix61c_add(Matrix61c* self, PyObject* args) {
     if (flag == -1) {
         PyErr_SetString(PyExc_ValueError, "Expected the equal dimensions");
         return NULL;
-    } else if (flag == -2){
+    } else if (flag == -2) {
         return NULL;
+    }
     return (PyObject *) rv;
 }
 
