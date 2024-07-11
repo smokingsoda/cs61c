@@ -4,6 +4,7 @@
         "basic.h": "c",
         "cunit.h": "c",
         "matrix.h": "c",
-        "omp.h": "c"
+        "omp.h": "c",
+        "charconv": "c"
     }
 }
