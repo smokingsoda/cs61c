@@ -264,13 +264,11 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2)
     {
         return -1;
     }
-    for (int j = 0; j < mat1->cols; j++) {
-        for (int i = 0; i < mat1->rows; i++) {
-            int index = i * mat1->cols;
-            result->data[j + index] = mat1->data[j + index] + mat2->data[j + index];
-        }
-        
+    for (int i = 0; i < mat1->rows * mat1->cols; i++)
+    {
+        result->data[i] = mat1->data[i] + mat2->data[i];
     }
+
     
     return 0;
 }
