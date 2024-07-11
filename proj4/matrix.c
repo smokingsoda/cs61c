@@ -219,7 +219,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     return 0;
-
 }
 
 /*
