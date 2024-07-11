@@ -189,7 +189,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int boundary = cols / 16 * 16;
+    int boundary = cols / 8 * 8;
     __m256d result_element0, result_element1, result_element2, result_element3;
     __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
     __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
@@ -198,23 +198,15 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
-                mat1_element2 = _mm256_loadu_pd(&(mat1->data[i][j + 8]));
-                mat1_element3 = _mm256_loadu_pd(&(mat1->data[i][j + 12]));
 
                 mat2_element0 = _mm256_loadu_pd(&(mat2->data[i][j]));
                 mat2_element1 = _mm256_loadu_pd(&(mat2->data[i][j + 4]));
-                mat2_element2 = _mm256_loadu_pd(&(mat2->data[i][j + 8]));
-                mat2_element3 = _mm256_loadu_pd(&(mat2->data[i][j + 12]));
 
                 result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
                 result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
-                result_element2 = _mm256_add_pd(mat1_element2, mat2_element2);
-                result_element3 = _mm256_add_pd(mat1_element3, mat2_element3);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
-                _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
-                _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
         }
