@@ -1,9 +1,9 @@
 from utils import *
 from unittest import TestCase
-small = 10
-medium = 100
-large = 1000
-pow_times = 10
+small = 4
+medium = 400
+large = 4000
+pow_times = 3
 """
 For each operation, you should write tests to test  on matrices of different sizes.
 Hint: use dp_mc_matrix to generate dumbpy and numc matrices with the same data and use
