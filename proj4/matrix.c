@@ -311,7 +311,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             if (id == num - 1) {
             for (int i = chunck_size * num; i < new_row; i++) {
                 for (int j = 0; j < col_boundary; j++) {
-                        result->data[i][j] = id;
+                        if (k == 0) {
+                            result->data[i][j] == 0;
+                        }
+                        result->data[i][j] += 1;
                     }
                 }
             
