@@ -194,7 +194,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d result_element0, result_element1;
     __m256d mat1_element0, mat1_element1;
     __m256d mat2_element0, mat2_element1; //256 bit can contain 4 double
-    omp_set_num_threads(4);
+    omp_set_num_threads(2);
     //#pragma omp parallel for collapse(2)
         #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
