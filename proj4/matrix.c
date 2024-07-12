@@ -206,8 +206,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 mat2_element1 = _mm256_loadu_pd((void*)&(mat2->data[i][j + 4]));
 
 
-                result_element0 = _mm256_addu_pd(mat1_element0, mat2_element0);
-                result_element1 = _mm256_addu_pd(mat1_element1, mat2_element1);
+                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
+                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
 
 
                 _mm256_storeu_pd((void*)&(result->data[i][j]), result_element0);
