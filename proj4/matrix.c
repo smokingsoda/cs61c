@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
 
 // Include SSE intrinsics
 #if defined(_MSC_VER)
@@ -190,18 +189,37 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int block_size = 64 / sizeof(double); // 根据缓存行大小确定块大小，假设double是8字节
-    int double_ptr_block_size = 64 / sizeof(double *);
-
+    int boundary = cols / 8 * 8;
+    __m256d result_element0, result_element1, result_element2, result_element3;
+    __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
+    __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
     omp_set_num_threads(2);
+    //#pragma omp parallel for collapse(2)
+        #pragma omp parallel for
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < boundary; j+=8) {
+                mat1_element0 = _mm256_load_pd((void*)&(mat1->data[i][j]));
+                mat1_element1 = _mm256_load_pd((void*)&(mat1->data[i][j + 4]));
 
-    #pragma omp parallel for
-    for (int ii = 0; ii < rows; ii += double_ptr_block_size) {
-        for (int jj = 0; jj < cols; jj += block_size) {
-            for (int i = ii; i < ii + double_ptr_block_size && i < rows; i++) {
-                for (int j = jj; j < jj + block_size && j < cols; j++) {
-                    result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
-                }
+                mat2_element0 = _mm256_load_pd((void*)&(mat2->data[i][j]));
+                mat2_element1 = _mm256_load_pd((void*)&(mat2->data[i][j + 4]));
+
+
+                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
+                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
+
+
+                _mm256_store_pd((void*)&(result->data[i][j]), result_element0);
+                _mm256_store_pd((void*)&(result->data[i][j + 4]), result_element1);
+
+                //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
+            }
+        }
+    if (boundary != cols) {
+        #pragma omp parallel for
+        for (int i = 0; i < rows; i++) {
+            for (int j = boundary; j < cols; j++) {
+                result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
             }
         }
     }
