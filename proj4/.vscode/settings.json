@@ -7,6 +7,12 @@
         "omp.h": "c",
         "charconv": "c",
         "stdio.h": "c",
-        "dumbmatrix.h": "c"
+        "dumbmatrix.h": "c",
+        "chrono": "c",
+        "array": "c",
+        "span": "c",
+        "string": "c",
+        "string_view": "c",
+        "vector": "c"
     }
 }
