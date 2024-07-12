@@ -1,8 +1,8 @@
 from utils import *
 from unittest import TestCase
-small = 4
-medium = 400
-large = 1600
+small = 7
+medium = 403
+large = 1603
 pow_times = 3
 """
 For each operation, you should write tests to test  on matrices of different sizes.
