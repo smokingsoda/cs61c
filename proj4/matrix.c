@@ -188,23 +188,41 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     if (mat1->rows != mat2->rows || mat1->cols != mat2->cols || result->rows != mat1->rows || result->cols != mat1->cols) {
         return -1;
     }
-
-    #define BLOCK_SIZE 64
-
     int rows = result->rows;
     int cols = result->cols;
+    int block_size = 64 / sizeof(double); // 根据缓存行大小确定块大小，假设double是8字节
 
-    #pragma omp parallel for collapse(2)
-    for (int i = 0; i < rows; i += BLOCK_SIZE) {
-        for (int j = 0; j < cols; j += BLOCK_SIZE) {
-            for (int bi = i; bi < i + BLOCK_SIZE && bi < rows; bi++) {
-                for (int bj = j; bj < j + BLOCK_SIZE && bj < cols; bj++) {
-                    result->data[bi][bj] = mat1->data[bi][bj] + mat2->data[bi][bj];
+    omp_set_num_threads(2);
+
+    #pragma omp parallel for
+    for (int ii = 0; ii < rows; ii += block_size) {
+        for (int jj = 0; jj < cols; jj += block_size) {
+            for (int i = ii; i < ii + block_size && i < rows; ++i) {
+                for (int j = jj; j < jj + block_size && j < cols; j += 8) {
+                    __m256d mat1_element0 = _mm256_load_pd((void*)&(mat1->data[i][j]));
+                    __m256d mat1_element1 = _mm256_load_pd((void*)&(mat1->data[i][j + 4]));
+
+                    __m256d mat2_element0 = _mm256_load_pd((void*)&(mat2->data[i][j]));
+                    __m256d mat2_element1 = _mm256_load_pd((void*)&(mat2->data[i][j + 4]));
+
+                    __m256d result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
+                    __m256d result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
+
+                    _mm256_store_pd((void*)&(result->data[i][j]), result_element0);
+                    _mm256_store_pd((void*)&(result->data[i][j + 4]), result_element1);
                 }
             }
         }
     }
 
+    if (cols % 8 != 0) {
+        #pragma omp parallel for
+        for (int i = 0; i < rows; i++) {
+            for (int j = (cols / 8) * 8; j < cols; j++) {
+                result->data[i][j] = mat1->data[i][j] + mat2->data[i][j];
+            }
+        }
+    }
     return 0;
 }
 
