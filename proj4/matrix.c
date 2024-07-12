@@ -288,7 +288,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat1_element;
     __m256d mat2_element;
     int col_boundary = new_col / 4 * 4;
-    omp_set_num_threads(2);
+    omp_set_num_threads(1);
     for (int k = 0; k < middle; k++) {
         #pragma omp parallel
         {
