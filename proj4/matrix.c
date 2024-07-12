@@ -308,15 +308,25 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 _mm256_storeu_pd(&(result->data[i][j]), result_element);
                 //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
-            if (id == num - 1) {
+        }
+        if (id == num - 1) {
             for (int i = chunck_size * num; i < new_row; i++) {
-                for (int j = 0; j < col_boundary; j++) {
-                        result->data[i][j] = chunck_size;
+                for (int j = 0; j < col_boundary; j += 4) {
+                    if (k == 0) {
+                        result_element = _mm256_setzero_pd();
+                    } else {
+                        result_element = _mm256_loadu_pd(&(result->data[i][j]));
+                    }
+                    mat1_element = _mm256_set1_pd(mat1->data[i][k]);
+                    mat2_element = _mm256_loadu_pd(&(mat2->data[k][j]));
+                    result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
+                    _mm256_storeu_pd(&(result->data[i][j]), result_element);
+                    //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
                     }
                 }
             
             }
-        }
+
         }
     }
     if (new_col != col_boundary) {
