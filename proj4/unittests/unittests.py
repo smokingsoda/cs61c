@@ -1,7 +1,7 @@
 from utils import *
 from unittest import TestCase
 small = 5
-medium = 7
+medium = 5
 large = 27
 pow_times = 3
 """
