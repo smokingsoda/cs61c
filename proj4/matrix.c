@@ -314,7 +314,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     if (k == 0) {
                         result->data[i][j] = id;
                     } else {
-                        result->data[i][j] = num;
+                        result->data[i][j] = result->data + num;
                     }
                     }
                 }
