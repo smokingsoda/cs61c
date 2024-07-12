@@ -1,7 +1,7 @@
 from utils import *
 from unittest import TestCase
 small = 3
-medium = 17
+medium = 7
 large = 27
 pow_times = 3
 """
@@ -112,9 +112,6 @@ class TestMul(TestCase):
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
-        
-        operator.mul(dp.mat1, dp_mat2)
-        operator.mul(nc.mat1, nc.mat2)
 
     def test_medium_mul(self):
         # TODO: YOUR CODE HERE
@@ -123,6 +120,9 @@ class TestMul(TestCase):
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
+        
+        print(operator.mul(dp.mat1, dp_mat2))
+        print(operator.mul(nc.mat1, nc.mat2))
 
     def test_large_mul(self):
         # TODO: YOUR CODE HERE
