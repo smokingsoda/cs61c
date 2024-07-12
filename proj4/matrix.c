@@ -329,6 +329,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
         }
     }
+    if (new_col != col_boundary) {
     //#pragma omp parallel for
     for (int j = col_boundary; j < new_col; ++j) {
         for (int k = 0; k < middle; k++) {
@@ -339,6 +340,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 result->data[i][j] = result->data[i][j] + mat1->data[i][k] * mat2->data[k][j];
             }
         }
+    }
     }
 
     return 0;
