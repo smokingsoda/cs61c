@@ -58,6 +58,7 @@ class TestSub(TestCase):
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
+
 class TestAbs(TestCase):
     def test_small_abs(self):
         # TODO: YOUR CODE HERE
@@ -121,8 +122,8 @@ class TestMul(TestCase):
         self.assertTrue(is_correct)
         print_speedup(speed_up)
 
-        print(operator.mul(dp.mat1, dp_mat2))
-        print(operator.mul(nc.mat1, nc.mat2))
+        print(operator.mul(dp_mat1, dp_mat2))
+        print(operator.mul(nc_mat1, nc.mat2))
 
     def test_large_mul(self):
         # TODO: YOUR CODE HERE
