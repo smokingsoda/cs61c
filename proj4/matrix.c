@@ -189,6 +189,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
 
+    #define BLOCK_SIZE 64
+
     int rows = result->rows;
     int cols = result->cols;
 
