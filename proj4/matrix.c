@@ -189,11 +189,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         return -1;
     }
 
-int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    if (mat1->rows != mat2->rows || mat1->cols != mat2->cols || result->rows != mat1->rows || result->cols != mat1->cols) {
-        return -1;
-    }
-
     int rows = result->rows;
     int cols = result->cols;
 
