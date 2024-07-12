@@ -291,8 +291,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     omp_set_num_threads(2);
     for (int k = 0; k < middle; k++) {
         #pragma omp parallel
-        {
         int num = omp_get_num_threads();
+        {
         int id = omp_get_thread_num();
         int chunck_size = new_row / num;
         for (int i = id * chunck_size; i < (id + 1) * chunck_size && i < new_row; i++) {
