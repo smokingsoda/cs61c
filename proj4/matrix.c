@@ -312,9 +312,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int i = chunck_size * num; i < new_row; i++) {
                 for (int j = 0; j < col_boundary; j++) {
                     if (k == 0) {
-                        result[i][j] = mat1->data[i][k] * mat2->data[k][j];
+                        result->data[i][j] = mat1->data[i][k] * mat2->data[k][j];
                     } else {
-                        result[i][j] += mat1->data[i][k] * mat2->data[k][j];
+                        result->data[i][j] += mat1->data[i][k] * mat2->data[k][j];
                     }
                     }
                 }
