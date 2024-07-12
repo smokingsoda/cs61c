@@ -308,6 +308,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 _mm256_storeu_pd(&(result->data[i][j]), result_element);
                 //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
+        }
         if (id == num - 1) {
             for (int i = chunck_size * num; i < new_row; i++) {
                 for (int j = 0; j < col_boundary; j += 4) {
@@ -325,8 +326,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 }
             
             }
-        }
-
 
         }
     }
