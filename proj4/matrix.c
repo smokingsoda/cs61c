@@ -289,10 +289,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     __m256d mat2_element;
     int col_boundary = new_col / 4 * 4;
     omp_set_num_threads(2);
+    int num = omp_get_num_threads();
     for (int k = 0; k < middle; k++) {
         #pragma omp parallel
         {
-        int num = omp_get_num_threads();
         int id = omp_get_thread_num();
         int chunck_size = new_row / num;
         
@@ -309,7 +309,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 _mm256_storeu_pd(&(result->data[i][j]), result_element);
                 //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
             }
-            if (id == num) {
+            if (id == num - 1) {
             for (int i = chunck_size * num; i < new_row; i++) {
                 for (int j = 0; j < col_boundary; j += 4) {
                     if (k == 0) {
