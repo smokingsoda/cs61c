@@ -123,7 +123,7 @@ class TestMul(TestCase):
         print_speedup(speed_up)
 
         print(operator.mul(dp_mat1, dp_mat2))
-        print(operator.mul(nc_mat1, nc.mat2))
+        print(operator.mul(nc_mat1, nc_mat2))
 
     def test_large_mul(self):
         # TODO: YOUR CODE HERE
