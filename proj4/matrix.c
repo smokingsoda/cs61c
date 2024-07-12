@@ -295,8 +295,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         {
         int id = omp_get_thread_num();
         int chunck_size = new_row / num;
-        
-        for (int i = id * chunck_size; i < (id + 1) * chunck_size; i++) {
+        for (int i = id * chunck_size; i < (id + 1) * chunck_size && i < new_row; i++) {
             for (int j = 0; j < col_boundary; j += 4) {
                 if (k == 0) {
                     result_element = _mm256_setzero_pd();
