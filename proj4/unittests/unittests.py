@@ -1,8 +1,8 @@
 from utils import *
 from unittest import TestCase
 small = 5
-medium = 5
-large = 27
+medium = 255
+large = 1027
 pow_times = 3
 """
 For each operation, you should write tests to test  on matrices of different sizes.
@@ -132,8 +132,8 @@ class TestMul(TestCase):
 
     def test_odd_mul(self):
         # TODO: YOUR CODE HERE
-        dp_mat1, nc_mat1 = rand_dp_nc_matrix(5, 6, seed=0)
-        dp_mat2, nc_mat2 = rand_dp_nc_matrix(6, 1003, seed=1)
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(321, 123, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(123, 557, seed=1)
         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "mul")
         self.assertTrue(is_correct)
         print_speedup(speed_up)
