@@ -199,19 +199,19 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < boundary; j+=8) {
-                mat1_element0 = _mm256_load_pd((void*)&(mat1->data[i][j]));
-                mat1_element1 = _mm256_load_pd((void*)&(mat1->data[i][j + 4]));
+                mat1_element0 = _mm256_loadu_pd((void*)&(mat1->data[i][j]));
+                mat1_element1 = _mm256_loadu_pd((void*)&(mat1->data[i][j + 4]));
 
-                mat2_element0 = _mm256_load_pd((void*)&(mat2->data[i][j]));
-                mat2_element1 = _mm256_load_pd((void*)&(mat2->data[i][j + 4]));
-
-
-                result_element0 = _mm256_add_pd(mat1_element0, mat2_element0);
-                result_element1 = _mm256_add_pd(mat1_element1, mat2_element1);
+                mat2_element0 = _mm256_loadu_pd((void*)&(mat2->data[i][j]));
+                mat2_element1 = _mm256_loadu_pd((void*)&(mat2->data[i][j + 4]));
 
 
-                _mm256_store_pd((void*)&(result->data[i][j]), result_element0);
-                _mm256_store_pd((void*)&(result->data[i][j + 4]), result_element1);
+                result_element0 = _mm256_addu_pd(mat1_element0, mat2_element0);
+                result_element1 = _mm256_addu_pd(mat1_element1, mat2_element1);
+
+
+                _mm256_storeu_pd((void*)&(result->data[i][j]), result_element0);
+                _mm256_storeu_pd((void*)&(result->data[i][j + 4]), result_element1);
 
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) + *(*(mat2->data + i) + j);
             }
@@ -238,10 +238,10 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int boundary = cols / 16 * 16;
-    __m256d result_element0, result_element1, result_element2, result_element3;
-    __m256d mat1_element0, mat1_element1, mat1_element2, mat1_element3;
-    __m256d mat2_element0, mat2_element1, mat2_element2, mat2_element3; //256 bit can contain 4 double
+    int boundary = cols / 8 * 8;
+    __m256d result_element0, result_element1;
+    __m256d mat1_element0, mat1_element1;
+    __m256d mat2_element0, mat2_element1; //256 bit can contain 4 double
     //#pragma omp parallel for collapse(2)
     omp_set_num_threads(2);
     #pragma omp parallel for
@@ -249,23 +249,15 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int j = 0; j < boundary; j+=16) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
-                mat1_element2 = _mm256_loadu_pd(&(mat1->data[i][j + 8]));
-                mat1_element3 = _mm256_loadu_pd(&(mat1->data[i][j + 12]));
 
                 mat2_element0 = _mm256_loadu_pd(&(mat2->data[i][j]));
                 mat2_element1 = _mm256_loadu_pd(&(mat2->data[i][j + 4]));
-                mat2_element2 = _mm256_loadu_pd(&(mat2->data[i][j + 8]));
-                mat2_element3 = _mm256_loadu_pd(&(mat2->data[i][j + 12]));
 
                 result_element0 = _mm256_sub_pd(mat1_element0, mat2_element0);
                 result_element1 = _mm256_sub_pd(mat1_element1, mat2_element1);
-                result_element2 = _mm256_sub_pd(mat1_element2, mat2_element2);
-                result_element3 = _mm256_sub_pd(mat1_element3, mat2_element3);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
-                _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
-                _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
@@ -435,9 +427,9 @@ int neg_matrix(matrix *result, matrix *mat) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int boundary = cols / 16 * 16;
-    __m256d result_element0, result_element1, result_element2, result_element3;
-    __m256d mat_element0, mat_element1, mat_element2, mat_element3;
+    int boundary = cols / 8 * 8;
+    __m256d result_element0, result_element1;
+    __m256d mat_element0, mat_element1;
     __m256d _neg = _mm256_set1_pd(-0.0);
     omp_set_num_threads(2);
     //#pragma omp parallel for collapse(2)
@@ -446,18 +438,12 @@ int neg_matrix(matrix *result, matrix *mat) {
             for (int j = 0; j < boundary; j+=16) {
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
                 mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
-                mat_element2 = _mm256_loadu_pd(&(mat->data[i][j + 8]));
-                mat_element3 = _mm256_loadu_pd(&(mat->data[i][j + 12]));
 
                 result_element0 = _mm256_xor_pd(mat_element0, _neg);
                 result_element1 = _mm256_xor_pd(mat_element1, _neg);
-                result_element2 = _mm256_xor_pd(mat_element2, _neg);
-                result_element3 = _mm256_xor_pd(mat_element3, _neg);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
-                _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
-                _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
@@ -481,11 +467,11 @@ int abs_matrix(matrix *result, matrix *mat) {
     }
     int rows = result->rows;
     int cols = result->cols;
-    int boundary = cols / 16 * 16;
-    __m256d result_element0, result_element1, result_element2, result_element3;
-    __m256d mat_element0, mat_element1, mat_element2, mat_element3;
-    __m256d positive_flag0, positive_flag1, positive_flag2, positive_flag3;
-    __m256d mask0, mask1, mask2, mask3;
+    int boundary = cols / 8 * 8;
+    __m256d result_element0, result_element1;
+    __m256d mat_element0, mat_element1;
+    __m256d positive_flag0, positive_flag1;
+    __m256d mask0, mask1;
     __m256d _neg = _mm256_set1_pd(-0.0);
     __m256d _zero = _mm256_set1_pd(0.0);
     omp_set_num_threads(2);
@@ -495,30 +481,20 @@ int abs_matrix(matrix *result, matrix *mat) {
             for (int j = 0; j < boundary; j+=16) {
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
                 mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
-                mat_element2 = _mm256_loadu_pd(&(mat->data[i][j + 8]));
-                mat_element3 = _mm256_loadu_pd(&(mat->data[i][j + 12]));
 
                 //if is less than, then return ones, else return zeros
                 mask0 = _mm256_cmp_pd(mat_element0, _zero, _CMP_LT_OQ);
                 mask1 = _mm256_cmp_pd(mat_element1, _zero, _CMP_LT_OQ);
-                mask2 = _mm256_cmp_pd(mat_element2, _zero, _CMP_LT_OQ);
-                mask3 = _mm256_cmp_pd(mat_element3, _zero, _CMP_LT_OQ);
 
                 //if mask is 1, then second, else first
                 positive_flag0 = _mm256_blendv_pd(_zero, _neg, mask0);
                 positive_flag1 = _mm256_blendv_pd(_zero, _neg, mask1);
-                positive_flag2 = _mm256_blendv_pd(_zero, _neg, mask2);
-                positive_flag3 = _mm256_blendv_pd(_zero, _neg, mask3);
 
                 result_element0 = _mm256_xor_pd(mat_element0, positive_flag0);
                 result_element1 = _mm256_xor_pd(mat_element1, positive_flag1);
-                result_element2 = _mm256_xor_pd(mat_element2, positive_flag2);
-                result_element3 = _mm256_xor_pd(mat_element3, positive_flag3);
 
                 _mm256_storeu_pd(&(result->data[i][j]), result_element0);
                 _mm256_storeu_pd(&(result->data[i][j + 4]), result_element1);
-                _mm256_storeu_pd(&(result->data[i][j + 8]), result_element2);
-                _mm256_storeu_pd(&(result->data[i][j + 12]), result_element3);
                 //*(*(result->data + i) + j) = *(*(mat1->data + i) + j) - *(*(mat2->data + i) + j);
             }
         }
