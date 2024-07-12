@@ -15,7 +15,7 @@ import time
 Global vars
 """
 num_samples = 1000
-decimal_places = 6
+decimal_places = 3
 func_mapping = {
     "add": operator.add,
     "sub": operator.sub,
