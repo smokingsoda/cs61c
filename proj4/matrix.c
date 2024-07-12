@@ -335,7 +335,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         for (int k = 0; k < middle; k++) {
             for (int i = 0; i < new_row; ++i) {
                 if (k == 0) {
-                    //result->data[i][j] = 0;
+                    result->data[i][j] = 0;
                 }
                 result->data[i][j] = result->data[i][j] + mat1->data[i][k] * mat2->data[k][j];
             }
