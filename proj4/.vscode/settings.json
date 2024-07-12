@@ -5,6 +5,8 @@
         "cunit.h": "c",
         "matrix.h": "c",
         "omp.h": "c",
-        "charconv": "c"
+        "charconv": "c",
+        "stdio.h": "c",
+        "dumbmatrix.h": "c"
     }
 }
