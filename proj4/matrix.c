@@ -246,7 +246,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     omp_set_num_threads(2);
     #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < boundary; j+=16) {
+            for (int j = 0; j < boundary; j+=8) {
                 mat1_element0 = _mm256_loadu_pd(&(mat1->data[i][j]));
                 mat1_element1 = _mm256_loadu_pd(&(mat1->data[i][j + 4]));
 
@@ -435,7 +435,7 @@ int neg_matrix(matrix *result, matrix *mat) {
     //#pragma omp parallel for collapse(2)
     #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < boundary; j+=16) {
+            for (int j = 0; j < boundary; j+=8) {
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
                 mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
 
@@ -478,7 +478,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     //#pragma omp parallel for collapse(2)
     #pragma omp parallel for
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < boundary; j+=16) {
+            for (int j = 0; j < boundary; j+=8) {
                 mat_element0 = _mm256_loadu_pd(&(mat->data[i][j]));
                 mat_element1 = _mm256_loadu_pd(&(mat->data[i][j + 4]));
 
