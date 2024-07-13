@@ -790,7 +790,7 @@ PyMODINIT_FUNC PyInit_dumbpy(void)
 
     Py_INCREF(&Matrix61cType);
     PyModule_AddObject(m, "Matrix", (PyObject *)&Matrix61cType);
-    printf("CS61C Fall 2021 Project 4: dumbpy imported!\n");
+    printf("CS61C Fall 2021 Project 4: dumbpy imported, and this one is more dumb!!!\n");
     fflush(stdout);
     return m;
 }
