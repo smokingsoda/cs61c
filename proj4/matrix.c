@@ -70,10 +70,8 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     if ((*mat)->data == NULL) {
         return -2;
     }
-    //Try other 
-    double *temp = (double *) malloc(sizeof(double) * rows * cols);
     for (int i = 0; i < rows; ++i) {
-        ((*mat)->data[i]) = &(temp[i * cols]);
+        ((*mat)->data[i]) = aligned_alloc(32, sizeof(double) * cols);
         //*((*mat)->data + i) = (double *) malloc(sizeof(double) * cols);
         for (int j = 0; j < cols; ++j) {
             *((*((*mat)->data + i)) + j) = 0;
@@ -139,7 +137,9 @@ void deallocate_matrix(matrix *mat) {
         return;
     }
     if (mat->ref_cnt == 1) {
-        free(*(mat->data));
+        for (int i = 0; i < mat->rows; ++i) {
+            free(*(mat->data + i));
+        }
         free(mat->data);
     }
     free(mat);
