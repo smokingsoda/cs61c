@@ -278,71 +278,64 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     /* TODO: YOUR CODE HERE */
-    if (mat1->cols != mat2->rows || result->rows != mat1->rows || result->cols != mat2->cols) {
+        if (mat1->cols != mat2->rows) {
+        PyErr_SetString(PyExc_ValueError, "Improper dimensions of two matrices to do multiplication");
+        PyErr_Print();
         return -1;
     }
-    int new_row = mat1->rows;
-    int new_col = mat2->cols;
-    int middle = mat1->cols;
-    __m256d result_element;
-    __m256d mat1_element;
-    __m256d mat2_element;
-    int col_boundary = new_col / 4 * 4;
-    omp_set_num_threads(2);
-    for (int k = 0; k < middle; k++) {
-        #pragma omp parallel
-        {
-        int id = omp_get_thread_num();
-        int num = omp_get_num_threads();
-        int chunck_size = new_row / num;
-        for (int i = id * chunck_size; i < (id + 1) * chunck_size; i++) {
-            for (int j = 0; j < col_boundary; j += 4) {
-                if (k == 0) {
-                    result_element = _mm256_setzero_pd();
-                } else {
-                    result_element = _mm256_loadu_pd(&(result->data[i][j]));
-                }
-                mat1_element = _mm256_set1_pd(mat1->data[i][k]);
-                mat2_element = _mm256_loadu_pd(&(mat2->data[k][j]));
-                result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
-                _mm256_storeu_pd(&(result->data[i][j]), result_element);
-                //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
-            }
-        }
-        if (id == num - 1) {
-            for (int i = chunck_size * num; i < new_row; i++) {
-                for (int j = 0; j < col_boundary; j += 4) {
-                    if (k == 0) {
-                        result_element = _mm256_setzero_pd();
-                    } else {
-                        result_element = _mm256_loadu_pd(&(result->data[i][j]));
-                    }
-                    mat1_element = _mm256_set1_pd(mat1->data[i][k]);
-                    mat2_element = _mm256_loadu_pd(&(mat2->data[k][j]));
-                    result_element = _mm256_fmadd_pd(mat1_element, mat2_element, result_element);
-                    _mm256_storeu_pd(&(result->data[i][j]), result_element);
-                    //(*(*(result->data + i) + j)) = (*(*(result->data + i) + j) + ((*(*(mat1->data + i) + k)) * (*(*(mat2->data + k) + j))));
-                    }
-                }
-            
-            }
+    // Wrong!:
+    // allocate_matrix(&result, mat1->rows, mat2->cols);
 
-        }
-    }
-    if (new_col != col_boundary) {
-    //#pragma omp parallel for
-    for (int j = col_boundary; j < new_col; ++j) {
-        for (int k = 0; k < middle; k++) {
-            for (int i = 0; i < new_row; ++i) {
-                if (k == 0) {
-                    result->data[i][j] = 0;
-                }
-                result->data[i][j] = result->data[i][j] + mat1->data[i][k] * mat2->data[k][j];
+    fill_matrix(result, 0.0);
+    /* Transpose the second matrix */
+    matrix* transpose = NULL;
+    allocate_matrix(&transpose, mat2->cols, mat2->rows);
+    transpose_matrix(transpose, mat2);
+
+    __m256d current_result, mat1_elm, mat2_elm;
+    double* tmp_array = (double*)malloc(sizeof(double) * 4);
+
+#pragma omp parallel for
+    for (int i = 0; i < result->rows; i++) {
+        for (int j = 0; j < result->cols; j++) {
+
+            current_result = _mm256_setzero_pd();
+            double tmp = 0.0;
+
+            for (int k = 0; k < mat1->cols / 16; k++) {
+                // result->data[i][j] += mat1->data[i][k] * mat2->data[k][j];
+                mat1_elm = _mm256_loadu_pd(mat1->data[i] + k * 16);
+                mat2_elm = _mm256_loadu_pd(transpose->data[j] + k * 16);
+                current_result = _mm256_fmadd_pd(mat1_elm, mat2_elm, current_result);
+
+                mat1_elm = _mm256_loadu_pd(mat1->data[i] + k * 16 + 4);
+                mat2_elm = _mm256_loadu_pd(transpose->data[j] + k * 16 + 4);
+                current_result = _mm256_fmadd_pd(mat1_elm, mat2_elm, current_result);
+
+                mat1_elm = _mm256_loadu_pd(mat1->data[i] + k * 16 + 8);
+                mat2_elm = _mm256_loadu_pd(transpose->data[j] + k * 16 + 8);
+                current_result = _mm256_fmadd_pd(mat1_elm, mat2_elm, current_result);
+
+                mat1_elm = _mm256_loadu_pd(mat1->data[i] + k * 16 + 12);
+                mat2_elm = _mm256_loadu_pd(transpose->data[j] + k * 16 + 12);
+                current_result = _mm256_fmadd_pd(mat1_elm, mat2_elm, current_result);
+            }
+            _mm256_storeu_pd(tmp_array, current_result);
+            for (int p = 0; p < 4; p++) {
+                tmp += tmp_array[p];
+            }
+            for (int k = mat1->cols / 16 * 16; k < mat1->cols; k++) {
+                tmp += mat1->data[i][k] * transpose->data[j][k];
+            }
+#pragma omp critical
+            {
+                result->data[i][j] += tmp;
             }
         }
-    }
     }
 
+    deallocate_matrix(transpose);
+    free(tmp_array);
     return 0;
 }
 
