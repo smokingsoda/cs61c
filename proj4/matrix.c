@@ -507,3 +507,27 @@ int abs_matrix(matrix *result, matrix *mat) {
     return 0;
 }
 
+int transpose_matrix(matrix* result, matrix* mat) {
+
+    if (result->rows != mat->cols || result->cols != mat->rows) {
+        PyErr_SetString(PyExc_RuntimeError, "Can't transpose!");
+        PyErr_Print();
+        return -1;
+    }
+    int row = 0, col = 0, blocksize = 50;
+
+    /* This piece of code comes from lab07 */
+#pragma omp parallel for
+    for (row = 0; row < mat->rows; row += blocksize) {
+        for (col = 0; col < mat->cols; col += blocksize) {
+            for (int x = row; x < row + blocksize && x < mat->rows; x++) {
+                for (int y = col; y < col + blocksize && y < mat->cols; y++) {
+                    /* dst[x + y * n] = src[x * n + y]; */
+                    result->data[y][x] = mat->data[x][y];
+                }
+            }
+        }
+    }
+    return 0;
+}
+
