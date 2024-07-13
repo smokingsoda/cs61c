@@ -139,9 +139,7 @@ void deallocate_matrix(matrix *mat) {
         return;
     }
     if (mat->ref_cnt == 1) {
-        for (int i = 0; i < mat->rows; ++i) {
-            free(*(mat->data + i));
-        }
+        free(*(mat->data));
         free(mat->data);
     }
     free(mat);
