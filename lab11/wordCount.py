@@ -12,7 +12,7 @@ def toPairs(word):
     return (word, 1)
 
 def sumCounts(a, b):
-    """ Add up the values for each word, resulting in a count of occurences """
+    """ Add up the values for each word, resulting in a count of occurrences """
     return a + b
 
 def wordCount(file_name, output="spark-wc-out-wordCount"):
